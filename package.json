@@ -1,0 +1,22 @@
+{
+  "name": "bash-theory",
+  "version": "1.0.0",
+  "description": "A forum for posting location-tied reviews for restaurants, professors, and classes around Hoboken, New Jersey.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gpan1/CS-554-Final-Project.git"
+  },
+  "author": "Jerry Chen, Andrew Chuah, Gavin Pan, Artur Shum, Adam Szyluk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gpan1/CS-554-Final-Project/issues"
+  },
+  "homepage": "https://github.com/gpan1/CS-554-Final-Project#readme",
+  "dependencies": {
+    "create-react-app": "^4.0.3"
+  }
+}
