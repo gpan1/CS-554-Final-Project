@@ -8,7 +8,7 @@ const getAll = async () => {
 }
 
 const addId = async (location, postId) => {
-    if (!validateLocation) throw TypeError("Invalid location");
+    if (!validateLocation(location)) throw TypeError("Invalid location");
     if (!postId) throw TypeError("No post id given");
 
     try {
