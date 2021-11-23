@@ -2,7 +2,7 @@ const {validateLocation, checkId } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
 const getAll = async () => {
-    let locCol = await location();
+    let locCol = await locations();
     let all = await locCol.find({}).toArray();
     return all;
 }
@@ -11,13 +11,14 @@ const addId = async (location, postId) => {
     if (!validateLocation(location)) throw TypeError("Invalid location");
     if (!postId) throw TypeError("No post id given");
 
+    const locs = await locations();
+
     try {
         let _postId = checkId(postId);
-        const updateResult = locations.findOneAndUpdate(
+        const updateResult = locs.findOneAndUpdate(
             {lng: location.lng, lat: location.lat},
-            { $push: {posts: _postId},
-            { returnNewDocument: true }}
-        );
+            { $push: {posts: _postId}},
+            { returnNewDocument: true });
         if (!updateResult) throw Error("Failed to add post to location");
         return updateResult;
     } catch (e) {
@@ -26,11 +27,12 @@ const addId = async (location, postId) => {
 }
 
 const create = async (args, postId=undefined) => {
+
+    console.log('create loc args: ' + JSON.stringify(args));
     if (!args
-        || !args.location
-        || !validateLocation(args.location))
+        || !validateLocation(args))
         throw TypeError("Invalid location args");
-    
+
     let newObj = {
         location: args.location,
     };

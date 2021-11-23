@@ -36,7 +36,7 @@ let checkPost = (args) => {
         || !validateStr(args.content)
         || !validateDate(args.date)
         || !validateLocation(args.location)
-        optional fields, checking only if passed
+    // optional fields, checking only if passed
         || (args.imgUrl && !validateStr(args.imgUrl))
         || (args.tags && args.tags.reduce( (x, acc) => 
             (acc && validateStr(x)), true))
@@ -67,7 +67,7 @@ let checkPost = (args) => {
 * @return {ObjectID} processed ObjectID
 */
 let checkId = (id) => {
-    if (invalidString(id))
+    if (!validateStr(id))
         throw TypeError(`Invalid id: ${id}`);
     let _id;
     _id = ObjectID(id);    
@@ -86,7 +86,7 @@ let idToStr = (obj) => {
         obj._id = obj._id.toString();
     if (obj.posts)
         obj.posts = obj.posts.map( x => x.toString())
-    return post;
+    return obj;
 }
 
 module.exports = {
