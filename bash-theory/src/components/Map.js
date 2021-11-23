@@ -1,4 +1,4 @@
-// Code mostly obtained from react-google-maps documentation.
+// Code skeleton from react-google-maps documentation.
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
 import "../App.css";
