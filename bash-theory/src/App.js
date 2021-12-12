@@ -5,6 +5,7 @@ import {
   Routes,
 } from "react-router-dom";
 import Map from "./components/Map";
+import Landing from "./components/Landing";
 import "./App.css";
 
 function App() {
@@ -21,7 +22,7 @@ function App() {
         </header>
         <div className="App-body">
           <Routes>
-            <Route exact path="/" element={<Map />} />
+            <Route exact path="/" element={<Landing />} />
           </Routes>
         </div>
       </div>
