@@ -1,4 +1,4 @@
-const ObjectID = require('mongodb').ObjectID
+const ObjectId = require('mongodb').ObjectId
 
 const validateStr = (str) => str && typeof str === 'string'
     && str.replaceAll(/ +/g, '').length !== 0;
@@ -28,7 +28,18 @@ let validateDate = (date) => {
             return false;
     return true;
 }
-
+let checkComment = (args) => {
+    if (!args)
+        throw TypeError("No args supplied");
+    if (!validateStr(args.name)
+        || !validateStr(args.body))
+        throw TypeError(`Invalid or missing fields in comment: ${JSON.stringify(args)}`);
+    const newObj = {
+        name: args.posterName,
+        body: args.body
+    };
+    return newObj;
+}
 let checkPost = (args) => {
     if (!args)
         throw TypeError("No args supplied");
@@ -67,14 +78,14 @@ let checkPost = (args) => {
 * Given a string representation of an ID,
 * checks for presence, type, and validity
 * @param {string} id 
-* @return {ObjectID} processed ObjectID
+* @return {ObjectId} processed ObjectID
 */
 let checkId = (id) => {
     if (!validateStr(id))
         throw TypeError(`Invalid id: ${id}`);
     let _id;
-    _id = ObjectID(id);    
-    if (!ObjectID.isValid(_id))
+    _id = ObjectId(id);    
+    if (!ObjectId.isValid(_id))
         throw Error(`Invalid ObjectID: ${_id}`);
     return _id;
 }
@@ -98,5 +109,6 @@ module.exports = {
     validateDate,
     checkId,
     checkPost,
-    idToStr
+    idToStr,
+    checkComment
 }
