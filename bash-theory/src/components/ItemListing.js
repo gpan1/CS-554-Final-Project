@@ -13,7 +13,7 @@ function ItemListing(props){
             <h1 style={{ marginBottom: "2rem" }}>Type of Item: Use props or something.</h1>
             <div className="itemList">
                 <Row>
-                    <Col xs={8} className="lgColumn">
+                    <Col xs={8}>
 
                     </Col>
                     <Col>

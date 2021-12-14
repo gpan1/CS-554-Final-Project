@@ -106,6 +106,24 @@ hr {
     margin-top: 5rem;
 }
 
-.listEntry{
+.listEntry {
     display: grid;
+}
+
+.contentDiv {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 3rem;
+}
+
+.contentDiv img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.contentDetails {
+    background-color: #C4C4C4;
+    padding: 1.2rem;
+    margin-top: 2rem;
 }
