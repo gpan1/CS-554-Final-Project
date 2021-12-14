@@ -8,9 +8,12 @@ const validateLocation = (location) => {
     if (!location 
         || typeof location !== 'object'
         || Array.isArray(location)
-        || !location.lat || typeof(location.lat) !== 'number'
-        || !location.lng || typeof(location.lng) !== 'number')
-        return false;
+        || location.lat === null || typeof(location.lat) !== 'number'
+        || location.lng === null || typeof(location.lng) !== 'number'){
+            console.log(location.lat !== null,location.lng);
+            return false;
+        }
+        
     return true;
 };
 

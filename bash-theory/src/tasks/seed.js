@@ -8,7 +8,9 @@ async function main() {
     const p1 = await posts.create({
         posterName: 'J',
         title: 'Babbio',
-        content: 'Blah'
+        content: 'Blah',
+        date: new Date(),
+        location: {lat:0,lng:1}
     });
     console.log(p1);
 
