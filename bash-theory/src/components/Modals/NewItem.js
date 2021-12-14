@@ -42,6 +42,7 @@ function ItemModal(){
                             <Form.Control as="textarea" placeholder="Description" style={{ height: '100px' }} />
                         </Form.FloatingLabel>
                     </Form.Group>
+                    <br/>
                     <Form.Group className="mb-3">
                         <Button type="submit">Submit</Button>
                     </Form.Group>
@@ -52,7 +53,7 @@ function ItemModal(){
 
     return (
         <>
-            <Button onClick={handleShow}>
+            <Button variant="modals" onClick={handleShow}>
                 Add New Item
             </Button>
 

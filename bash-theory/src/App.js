@@ -1,31 +1,23 @@
 import {
-  NavLink,
   BrowserRouter as Router,
   Route,
   Routes,
 } from "react-router-dom";
-import Map from "./components/Map";
-import Landing from "./components/Landing";
+
 import "./App.css";
+
+import Landing from "./components/Landing";
+import ItemDetails from "./components/ItemDetails";
+import ItemListing from "./components/ItemListing";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   return (
     <Router>
-      <div>
-        <header className="App-header">
-          <h1 className="App-title">Bash Theory</h1>
-          <nav>
-            <NavLink className="navlink" to="/">
-              Map
-            </NavLink>
-          </nav>
-        </header>
-        <div className="App-body">
-          <Routes>
-            <Route exact path="/" element={<Landing />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route exact path="/" element={<ItemListing />} />
+        <Route exact path="*" element={<ErrorPage />} />
+      </Routes>
     </Router>
   );
 }
