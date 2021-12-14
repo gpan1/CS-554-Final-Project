@@ -35,7 +35,8 @@ let checkComment = (args) => {
         || !validateStr(args.body))
         throw TypeError(`Invalid or missing fields in comment: ${JSON.stringify(args)}`);
     const newObj = {
-        name: args.posterName,
+        _id: ObjectId(),
+        name: args.name,
         body: args.body
     };
     return newObj;

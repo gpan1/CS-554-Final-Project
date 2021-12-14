@@ -13,9 +13,14 @@ async function main() {
         location: {lat:0,lng:1}
     });
     console.log(p1);
+    const c1 = await posts.addComment({
+        postId: p1._id,
+        name: 'Hill',
+        body: 'great place!'
+    });
+    console.log(c1);
 
     console.log("Done seeding database");
-
     await db.serverConfig.close();
 }
 
