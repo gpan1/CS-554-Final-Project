@@ -1,6 +1,7 @@
-const {checkPost, validateLocation, checkId, idToStr, checkComment} = require('../util')
+const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr} = require('../util')
 const { posts } = require('../config/mongoCollections');
 const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
+const { ObjectId } = require('mongodb');
 
 const getAll = async () => {
     let postCol = await posts();
@@ -16,6 +17,23 @@ const getPostById = async (id) => {
         return post;
     } catch(e){
         console.log(`Get post by id failed: ${e}`);
+        return {error: e};
+    }
+}
+const searchByTitle = async (term) => {
+    let res = [];
+    try{
+        validateStr(term);
+        let postCol = await posts();
+        const post = await postCol.find({ "title": { $regex: `${term}` }});
+        if (post === null) throw Error('No post match');
+        await post.forEach((x)=>{
+            res.push(idToStr(x));
+        } );
+        // await post.forEach(console.log);
+        return res;
+    } catch(e){
+        console.log(`Post search by title failed: ${e}`);
         return {error: e};
     }
 }
@@ -64,7 +82,8 @@ const addComment = async (args) => {
         parsedId = checkId(args.postId);
         await getPostById(args.postId);
         commentObj = {
-            ...checkComment(args, true)
+            ...checkComment(args, true),
+            _id: ObjectId()
         };
     } catch (e) {
         console.log(`Creating comment failed: ${e}`);
@@ -76,12 +95,14 @@ const addComment = async (args) => {
       { $addToSet: { comments: commentObj } }
     );
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw Error("Failed to add comment");
-    return await getPostById(args.postId);
+    
+    return idToStr(commentObj);
 }
 module.exports = {
     getAll,
     create,
     addComment,
-    getPostById
+    getPostById,
+    searchByTitle
     // getByPosterName
 }
