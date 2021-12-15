@@ -15,7 +15,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<ItemDetails />} />
+        <Route exact path="/" element={<Landing />} />
+        <Route exact path="/item" element={<ItemDetails />} />
+        <Route exact path="/listing" element={<ItemListing />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
