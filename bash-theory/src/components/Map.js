@@ -1,12 +1,12 @@
-// Code mostly obtained from react-google-maps documentation.
+// Code skeleton from react-google-maps documentation.
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
 import "../App.css";
 // import itemData from "../../../data/items"; // This will be for when the data functions get implemented.
 
 const containerStyle = {
-  width: "400px",
-  height: "400px",
+  width: "100%",
+  height: "500px",
 };
 
 // Coordinates of 1 Castle Point Terrace.
