@@ -1,12 +1,28 @@
 const {validateLocation, checkId } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
+/**
+ * Location schema:
+ * coords!: [Number, Number]    \\ (longitude, latitude)
+ * name!: String
+ * posts!: [ID]                 \\ can be empty list
+ * description?: String
+ */
+
+/**
+ * Valid coordinate ranges:
+ * longitude: [-180, 180]
+ * latitude: [-90, 90]
+ */
+
+// returns all locations
 const getAll = async () => {
     let locCol = await locations();
     let all = await locCol.find({}).toArray();
     return all;
 }
 
+// tries to add a post ID to a location
 const addId = async (location, postId) => {
     if (!validateLocation(location)) throw TypeError("Invalid location");
     if (!postId) throw TypeError("No post id given");
