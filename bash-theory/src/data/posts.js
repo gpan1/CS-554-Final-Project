@@ -23,6 +23,7 @@ const getPostById = async (id) => {
 const searchByTitle = async (args) => {
     let res = [];
     let tags = ['Building', 'Class', 'Eating Spot', 'Professor'];
+    let sorting = { 'title': 1 };
     try{
         validateStr(args.term);
         if (args.tags){
@@ -30,6 +31,21 @@ const searchByTitle = async (args) => {
                 validateStr(t);
             }
             tags = args.tag;
+        }
+        // if sorting is provided it will be in the form [field, order]
+        // for order: 1 is ascending, -1 is descending
+        if (args.sort){
+            if (!Array.isArray(args.sort)) throw TypeError(`Invalid sort: ${args.sort}`);
+            validateStr(args.sort[0]);
+            let order = 1;
+            if (args.sort.length > 1){
+                // if the sort option is invalid, just use default of 1
+                if ((typeof(args.sort[1]) === 'number') && args.sort[1] === -1){
+                    order = -1;
+                }
+            }
+            sorting = {};
+            sorting[`${args.sort[0]}`] = order;
         }
         let postCol = await posts();
         const query = { 
