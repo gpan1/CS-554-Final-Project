@@ -28,7 +28,7 @@ const getPostById = async (id) => {
 * @param {object} 
 * @return {Array} array of posts matching search
 */
-const searchByTitle = async (args) => {
+const postSearch = async (args) => {
     let res = [];
     let tags = ['Building', 'Class', 'Eating Spot', 'Professor'];
     let sorting = { 'title': 1 };
@@ -143,6 +143,6 @@ module.exports = {
     create,
     addComment,
     getPostById,
-    searchByTitle
+    postSearch
     // getByPosterName
 }

@@ -31,7 +31,7 @@ async function main() {
         rating: 4.5
     });
     console.log(c1);
-    const s1 = await posts.searchByTitle({
+    const s1 = await posts.postSearch({
         term:'Ba',
         tags: ['Building','Eating Spot'],
         sort: ['title',1]
