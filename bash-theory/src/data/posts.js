@@ -20,12 +20,28 @@ const getPostById = async (id) => {
         return {error: e};
     }
 }
-const searchByTitle = async (term) => {
+const searchByTitle = async (args) => {
     let res = [];
+    let tags = ['Building', 'Class', 'Eating Spot', 'Professor'];
     try{
-        validateStr(term);
+        validateStr(args.term);
+        if (args.tags){
+            for (let t of args.tags){
+                validateStr(t);
+            }
+            tags = args.tag;
+        }
         let postCol = await posts();
-        const post = await postCol.find({ "title": { $regex: `${term}` }});
+        const query = { 
+            "title": { $regex: `${args.term}` },
+            "tags": { $in: tags }    
+        };
+        const options = {
+            // sort returned documents in ascending order by title (A->Z)
+            sort: { 'title': 1 }
+            // projection: { _id: 0, title: 1, imdb: 1 },
+          };
+        const post = await postCol.find(query);
         if (post === null) throw Error('No post match');
         await post.forEach((x)=>{
             res.push(idToStr(x));

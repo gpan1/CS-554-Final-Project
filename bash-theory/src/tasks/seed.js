@@ -8,27 +8,30 @@ async function main() {
     const p1 = await posts.create({
         posterName: 'J',
         title: 'Babbio',
-        content: 'Building',
+        content: 'Building mainly used for business tech classes, also hosts LANs',
         date: new Date(),
-        location: {lat:0,lng:1}
+        location: {lat:0,lng:1},
+        tags: ['Building']
     });
     console.log(p1);
     const p2 = await posts.create({
         posterName: 'J',
         title: 'Muteki Ramen',
-        content: 'Eating Spots',
+        content: 'Ramen place opened in 20xx.',
         date: new Date(),
-        location: {lat:1,lng:1}
+        location: {lat:1,lng:1},
+        tags: ['Eating Spot']
     });
     console.log(p2);
     const c1 = await posts.addComment({
         postId: p1._id,
-        name: 'Hill',
-        body: 'great place!',
+        posterName: 'Hill',
+        content: 'great place!',
+        date: new Date(),
         rating: 4.5
     });
     console.log(c1);
-    const s1 = await posts.searchByTitle('Ba');
+    const s1 = await posts.searchByTitle({term:'Ba'});
     console.log(s1);
 
 

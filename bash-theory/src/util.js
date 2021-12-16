@@ -32,14 +32,16 @@ let validateDate = (date) => {
 let checkComment = (args) => {
     if (!args)
         throw TypeError("No args supplied");
-    if (!validateStr(args.name)
-        || !validateStr(args.body)
-        || !validateNum(args.rating))
+    if (!validateStr(args.posterName)
+        || !validateStr(args.content)
+        || !validateNum(args.rating)
+        || !validateDate(args.date))
         throw TypeError(`Invalid or missing fields in comment: ${JSON.stringify(args)}`);
     const newObj = {
         // _id: ObjectId(),
-        name: args.name,
-        body: args.body,
+        posterName: args.posterName,
+        content: args.content,
+        date: args.date,
         rating: args.rating
     };
     return newObj;
