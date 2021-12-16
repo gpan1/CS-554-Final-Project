@@ -3,10 +3,28 @@ const { posts } = require('../config/mongoCollections');
 const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
 const { ObjectId } = require('mongodb');
 
+const bluebird = require('bluebird');
+const redis = require('redis');
+const client = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
 const getAll = async () => {
     let postCol = await posts();
     let all = await postCol.find({}).toArray();
     return all.map(x => idToStr(x));
+}
+const checkPostId = async (id) => {
+    try{
+        let parsedId = checkId(id);
+        let postCol = await posts();
+        const post = await postCol.findOne({ _id: parsedId });
+        if (post === null) throw Error('No post with that id');
+        return true;
+    } catch(e){
+        console.log(`Get post by id failed: ${e}`);
+        return {error: e};
+    }
 }
 const getPostById = async (id) => {
     try{
@@ -120,7 +138,7 @@ const addComment = async (args) => {
     let parsedId;
     try {
         parsedId = checkId(args.postId);
-        await getPostById(args.postId);
+        await checkPostId(args.postId);
         commentObj = {
             ...checkComment(args, true),
             _id: ObjectId()
