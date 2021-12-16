@@ -20,6 +20,14 @@ const getPostById = async (id) => {
         return {error: e};
     }
 }
+/**
+* Takes in an object that must contain term to search for.
+* Optional fields include tags in the form of an array, ie:['Building', 'Class'],
+* and sorting options in the form of [sortingField, sortingOrder].
+* SortingOrder: 1 is ascending, -1 is descending
+* @param {object} 
+* @return {Array} array of posts matching search
+*/
 const searchByTitle = async (args) => {
     let res = [];
     let tags = ['Building', 'Class', 'Eating Spot', 'Professor'];
@@ -30,7 +38,7 @@ const searchByTitle = async (args) => {
             for (let t of args.tags){
                 validateStr(t);
             }
-            tags = args.tag;
+            tags = args.tags;
         }
         // if sorting is provided it will be in the form [field, order]
         // for order: 1 is ascending, -1 is descending
