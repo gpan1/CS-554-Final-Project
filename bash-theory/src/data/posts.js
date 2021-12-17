@@ -5,35 +5,68 @@ const { ObjectId } = require('mongodb');
 
 const bluebird = require('bluebird');
 const redis = require('redis');
-bluebird.promisifyAll(redis);
 const client = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
 
 const getAll = async () => {
     let postCol = await posts();
     let all = await postCol.find({}).toArray();
     return all.map(x => idToStr(x));
 }
+/**
+* Does the same thing as getPostById but doesn't increment redis post count for popular posts
+* Can be used in update or delete functions to check if post id is valid
+* @return {boolean} true if post exists, false otherwise
+*/
 const checkPostId = async (id) => {
     try{
         let parsedId = checkId(id);
         let postCol = await posts();
         const post = await postCol.findOne({ _id: parsedId });
-        if (post === null) throw Error('No post with that id');
+        if (post === null) return false;
         return true;
     } catch(e){
         console.log(`Get post by id failed: ${e}`);
         return {error: e};
     }
 }
+/**
+* Checks if the post id is valid and returns with the post if it exists
+* Also increments the redis post count for popular posts as someone has visited the post
+* @param {string}
+* @return {object}
+*/
 const getPostById = async (id) => {
     try{
         let parsedId = checkId(id);
         let postCol = await posts();
         const post = await postCol.findOne({ _id: parsedId });
         if (post === null) throw Error('No post with that id');
+        await client.zincrbyAsync('popular', 1, id);
         return post;
     } catch(e){
         console.log(`Get post by id failed: ${e}`);
+        return {error: e};
+    }
+}
+/**
+* Gets the posts that have been most visted using redis
+* @return {Array} array of most popular posts capped at length 20
+*/
+const getPopularPosts = async () => {
+    try{
+        let popularCache = await client.zrangebyscoreAsync('popular', 0, 'inf');
+        if (popularCache.length === 0){
+            throw `No posts available.`
+        }
+        let popularArr = popularCache.reverse();
+        if (popularArr.length > 20){
+            popularArr = popularArr.slice(0,20);
+        }
+        return popularArr;
+    } catch(e){
+        console.log(`Get popular post failed: ${e}`);
         return {error: e};
     }
 }
@@ -126,7 +159,7 @@ const create = async (args) => {
             console.debug(`Added post ${newObj._id} to location`);
         }
     }
-
+    await client.zaddAsync('popular', 1, newObj._id);
     return idToStr(newObj);
 }
 
@@ -137,7 +170,8 @@ const addComment = async (args) => {
     let parsedId;
     try {
         parsedId = checkId(args.postId);
-        await checkPostId(args.postId);
+        await getPostById(args.postId);
+        // await checkPostId(args.postId);
         commentObj = {
             ...checkComment(args, true),
             _id: ObjectId()
@@ -160,6 +194,7 @@ module.exports = {
     create,
     addComment,
     getPostById,
-    postSearch
+    postSearch,
+    getPopularPosts
     // getByPosterName
 }

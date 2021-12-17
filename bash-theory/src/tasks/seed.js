@@ -54,10 +54,10 @@ async function main() {
     });
     console.log(s1);
 
-
+    await dbConnection.closeConnection();
     console.log("Done seeding database");
     
-    await dbConnection.closeConnection();
+    
 }
 
 main();

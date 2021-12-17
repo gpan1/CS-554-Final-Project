@@ -27,7 +27,6 @@ const addId = async (location, postId) => {
 }
 
 const create = async (args, postId=undefined) => {
-
     console.log('create loc args: ' + JSON.stringify(args));
     if (!args
         || !validateLocation(args))
