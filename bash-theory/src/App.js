@@ -15,7 +15,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route exact path="/" element={<ItemDetails />} />
+        <Route exact path="/" element={<Landing />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
