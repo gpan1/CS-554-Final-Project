@@ -5,7 +5,7 @@ const getCollectionFn = (collection) => {
 
   return async () => {
     if (!_col) {
-      const db = await dbConnection();
+      const db = await dbConnection.connectToDb();
       _col = await db.collection(collection);
       // ensure (lat,lng) as compound indexes for the locations
       if (collection==='Locations')

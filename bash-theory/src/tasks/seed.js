@@ -2,7 +2,7 @@ const dbConnection = require("../config/mongoConnection");
 const posts = require("../data/posts");
 
 async function main() {
-    const db = await dbConnection();
+    const db = await dbConnection.connectToDb();
     await db.dropDatabase();
     
     const p1 = await posts.create({
@@ -23,10 +23,26 @@ async function main() {
         tags: ['Eating Spot']
     });
     console.log(p2);
+    const p3 = await posts.create({
+        posterName: 'J',
+        title: 'Howe Tall',
+        content: 'How tall is Howe?',
+        date: new Date(),
+        location: {lat:0,lng:1},
+        tags: ['Building']
+    });
+    console.log(p3);
     const c1 = await posts.addComment({
         postId: p1._id,
         posterName: 'Hill',
         content: 'great place!',
+        date: new Date(),
+        rating: 4.5
+    });
+    const c2 = await posts.addComment({
+        postId: p3._id,
+        posterName: 'Hill',
+        content: 'I dont know but its pretty tall',
         date: new Date(),
         rating: 4.5
     });
@@ -40,7 +56,8 @@ async function main() {
 
 
     console.log("Done seeding database");
-    await db.serverConfig.close();
+    
+    await dbConnection.closeConnection();
 }
 
 main();

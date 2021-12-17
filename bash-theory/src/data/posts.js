@@ -5,9 +5,8 @@ const { ObjectId } = require('mongodb');
 
 const bluebird = require('bluebird');
 const redis = require('redis');
+bluebird.promisifyAll(redis);
 const client = redis.createClient();
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
 
 const getAll = async () => {
     let postCol = await posts();
