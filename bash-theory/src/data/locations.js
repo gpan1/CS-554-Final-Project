@@ -60,7 +60,7 @@ const create = async (args) => {
 const getByCoords = (coords) => {
   if (!validateCoordinates(coords)) 
     throw TypeError("Invalid coordinates; expected [longitude, latitude]");
-  
+  // todo
 
 }
 
@@ -72,10 +72,3 @@ module.exports = {
   // getById,
   // getByPosterName
 }
-
-//debug stuff
-const exampleLocation = {
-  name: "o'bagel",
-  location: [0, 0],
-  description: 'some friggin bagels'
-};
