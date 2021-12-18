@@ -10,7 +10,7 @@ async function main() {
         title: 'Babbio',
         content: 'Building mainly used for business tech classes, also hosts LANs',
         date: new Date(),
-        location: {lat:0,lng:1},
+        location: [0,1],
         tags: ['Building']
     });
     console.log(p1);
@@ -19,7 +19,7 @@ async function main() {
         title: 'Muteki Ramen',
         content: 'Ramen place opened in 20xx.',
         date: new Date(),
-        location: {lat:1,lng:1},
+        location: [1,1],
         tags: ['Eating Spot']
     });
     console.log(p2);
@@ -28,7 +28,7 @@ async function main() {
         title: 'Howe Tall',
         content: 'How tall is Howe?',
         date: new Date(),
-        location: {lat:0,lng:1},
+        location: [0,0],
         tags: ['Building']
     });
     console.log(p3);

@@ -1,16 +1,14 @@
 const ObjectId = require('mongodb').ObjectId
 
 const validateStr = (str) => str && typeof str === 'string'
-<<<<<<< HEAD
-  && str.replaceAll(/ +/g, '').length !== 0;
-
-// validates location object for creation
-=======
     && str.replaceAll(/ +/g, '').length !== 0;
+
+/**
+* Validates rating input, range from 0-5
+*/
 const validateNum = (num) => num && typeof num === 'number'
     && num >= 0 && num <= 5;
 // dummy function for validating locations once google maps api is added
->>>>>>> 23f298c3915f0bfcae991943fce7e871d81b50e2
 const validateLocation = (location) => {
   if (!validateStr(location.name)
     || !validateStr(location.description)
@@ -50,19 +48,6 @@ let validateDate = (date) => {
   return true;
 }
 let checkComment = (args) => {
-<<<<<<< HEAD
-  if (!args)
-    throw TypeError("No args supplied");
-  if (!validateStr(args.name)
-    || !validateStr(args.body))
-    throw TypeError(`Invalid or missing fields in comment: ${JSON.stringify(args)}`);
-  const newObj = {
-    _id: ObjectId(),
-    name: args.name,
-    body: args.body
-  };
-  return newObj;
-=======
     if (!args)
         throw TypeError("No args supplied");
     if (!validateStr(args.posterName)
@@ -78,7 +63,6 @@ let checkComment = (args) => {
         rating: args.rating
     };
     return newObj;
->>>>>>> 23f298c3915f0bfcae991943fce7e871d81b50e2
 }
 let checkPost = (args) => {
   if (!args)

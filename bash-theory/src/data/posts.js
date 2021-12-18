@@ -43,6 +43,7 @@ const getPostById = async (id) => {
     let postCol = await posts();
     const post = await postCol.findOne({ _id: parsedId });
     if (post === null) throw Error('No post with that id');
+    await client.zincrbyAsync('popular', 1, id);
     return post;
   } catch (e) {
     console.log(`Get post by id failed: ${e}`);
@@ -50,7 +51,7 @@ const getPostById = async (id) => {
   }
 }
 /**
-* Gets the posts that have been most visted using redis
+* Gets the posts that have are most visited using redis
 * @return {Array} array of most popular posts capped at length 20
 */
 const getPopularPosts = async () => {
@@ -127,20 +128,20 @@ const postSearch = async (args) => {
     }
 }
 const create = async (args) => {
-  let newObj;
-
-  try {
-    newObj = {
-      ...checkPost(args, true),
-      comments: []
-    };
-  } catch (e) {
-    console.log(`Creating post failed: ${e}`);
-    return { error: e };
-  }
-
-  
-
+    let newObj;
+    try {
+        newObj = {
+        ...checkPost(args, true),
+        comments: []
+        };
+    } catch (e) {
+        console.log(`Creating post failed: ${e}`);
+        return { error: e };
+    }
+    const postCol = await posts();
+    const { insertedId } = await postCol.insertOne(newObj);
+    if (!insertedId) throw Error("Failed to create post");
+    newObj._id = insertedId.toString();
     // if location hasn't been added, attempt adding
     if (args.location && validateLocation(args.location)) {
         // if location already exists, inserting it will throw which is fine

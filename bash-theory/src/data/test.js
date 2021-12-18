@@ -4,7 +4,7 @@ const mongoConnection = require('../config/mongoConnection')
 
 const test = async () => {
 
-    const _db = await mongoConnection();
+    const _db = await mongoConnection.connectToDb();
     await _db.dropDatabase();
 
     let result = {};
