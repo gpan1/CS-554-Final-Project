@@ -52,13 +52,29 @@ const create = async (args) => {
       posts: []
     };
   const locCol = await locations();
-
   const { insertedId } = await locCol.insertOne(newObj);
-    
   if (!insertedId) throw Error("Failed to create location");
-
   return idToStr(newObj);
 }
+/**
+* Checks if the post id is valid and returns with the post if it exists
+* Also increments the redis post count for popular posts as someone has visited the post
+* @param {string}
+* @return {object}
+*/
+const getLocById = async (id) => {
+    try {
+      let parsedId = checkId(id);
+      let locCol = await locations();
+      const loc = await locCol.findOne({ _id: parsedId });
+      if (loc === null) throw Error('No loc with that id');
+    //   await client.zincrbyAsync('popular', 1, id);
+      return idToStr(loc);
+    } catch (e) {
+      console.log(`Get location by id failed: ${e}`);
+      return { error: e };
+    }
+  }
 
 const getByCoords = (coords) => {
   if (!validateCoordinates(coords)) 
@@ -71,7 +87,8 @@ module.exports = {
   getAll,
   create,
   addPost,
-  getByCoords
+  getByCoords,
+  getLocById
   // getById,
   // getByPosterName
 }

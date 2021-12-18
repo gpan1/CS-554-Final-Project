@@ -95,6 +95,7 @@ let checkPost = (args) => {
     || !validateStr(args.title)
     || !validateStr(args.content)
     || !validateDate(args.date)
+    || !validateStr(args.locationId)
     || !validateCoordinates(args.location)
     || !validateNum(args.rating)
     // optional fields, checking only if passed
@@ -110,6 +111,7 @@ let checkPost = (args) => {
     title: args.title,
     content: args.content,
     date: args.date,
+    locationId: args.locationId,
     location: args.location,
     rating: args.rating
   };
@@ -146,6 +148,8 @@ let checkId = (id) => {
 let idToStr = (obj) => {
   if (obj._id)
     obj._id = obj._id.toString();
+  if (obj.locationId)
+    obj.locationId = obj.locationId.toString();
   if (obj.posts)
     obj.posts = obj.posts.map(x => x.toString());
   if (obj.comments)

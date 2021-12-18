@@ -12,11 +12,22 @@ async function main() {
         description: 'Japanese Ramen shop opened in 20xx.'
     })
     console.log(l1);
+    const l2 = await locations.create({
+        name: "Babbio",
+        location: [1,1],
+        description: 'Academic building located at the southside of Campus, mainly used for Businees Tech classes.'
+    })
+    const l3 = await locations.create({
+        name: "Howe",
+        location: [0,1],
+        description: 'Administrative building with many offices. Pierce Dining on second floor'
+    })
     const p1 = await posts.create({
         posterName: 'J',
         title: 'Babbio big',
         content: 'This building can fit so many gamers in it',
         date: new Date(),
+        locationId: l2._id,
         location: [0,1],
         tags: ['Building'],
         rating: 5
@@ -28,6 +39,7 @@ async function main() {
         content: "That's it, my review is in the title.",
         date: new Date(),
         location: [1,1],
+        locationId: l1._id,
         tags: ['Eating Spot'],
         rating: 4
     });
@@ -38,6 +50,7 @@ async function main() {
         content: 'How tall is Howe? Not really a review I know, but just curious.',
         date: new Date(),
         location: [0,0],
+        locationId: l3._id,
         tags: ['Building'],
         rating: 3.5
     });

@@ -1,6 +1,7 @@
 const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr, validateCoordinates, validateArray} = require('../util')
 const { posts } = require('../config/mongoCollections');
-const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
+// const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
+const locations = require("./locations");
 const { ObjectId } = require('mongodb');
 
 const bluebird = require('bluebird');
@@ -134,6 +135,8 @@ const create = async (args) => {
         ...checkPost(args, true),
         comments: []
         };
+        const loc = await locations.getLocById(newObj.locationId);
+        newObj.locationId = ObjectId(newObj.locationId);
     } catch (e) {
         console.log(`Creating post failed: ${e}`);
         return { error: e };
