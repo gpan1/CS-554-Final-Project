@@ -75,15 +75,13 @@ let checkComment = (args) => {
         throw TypeError("No args supplied");
     if (!validateStr(args.posterName)
         || !validateStr(args.content)
-        || !validateNum(args.rating)
         || !validateDate(args.date))
         throw TypeError(`Invalid or missing fields in comment: ${JSON.stringify(args)}`);
     const newObj = {
         // _id: ObjectId(),
         posterName: args.posterName,
         content: args.content,
-        date: args.date,
-        rating: args.rating
+        date: args.date
     };
     return newObj;
 }
@@ -98,6 +96,7 @@ let checkPost = (args) => {
     || !validateStr(args.content)
     || !validateDate(args.date)
     || !validateCoordinates(args.location)
+    || !validateNum(args.rating)
     // optional fields, checking only if passed
     || (args.imgUrl && !validateUrl(args.imgUrl))
     || (args.tags && args.tags.reduce((x, acc) =>
@@ -111,7 +110,8 @@ let checkPost = (args) => {
     title: args.title,
     content: args.content,
     date: args.date,
-    location: args.location
+    location: args.location,
+    rating: args.rating
   };
 
   if (args.imgUrl) newObj.imgUrl = args.imgUrl;
