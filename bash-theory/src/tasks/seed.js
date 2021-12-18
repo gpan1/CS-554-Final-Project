@@ -6,7 +6,12 @@ async function main() {
     const db = await dbConnection.connectToDb();
     await db.dropDatabase();
     
-    // const l1 = await locations.create()
+    const l1 = await locations.create({
+        name: "Muteki Ramen",
+        location: [0,1],
+        description: 'Japanese Ramen shop opened in 20xx.'
+    })
+    console.log(l1);
     const p1 = await posts.create({
         posterName: 'J',
         title: 'Babbio big',

@@ -1,4 +1,4 @@
-const { validateLocation, checkId, validateCoordinates } = require('../util')
+const { validateLocation, checkId, validateCoordinates, validateStr, idToStr } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
 /**
@@ -47,14 +47,17 @@ const create = async (args) => {
     || !validateLocation(args))
     throw TypeError("Invalid location");
 
-  let newObj = {...args};
+  let newObj = {
+      ...args,
+      posts: []
+    };
   const locCol = await locations();
 
   const { insertedId } = await locCol.insertOne(newObj);
     
   if (!insertedId) throw Error("Failed to create location");
 
-  return newObj;
+  return idToStr(newObj);
 }
 
 const getByCoords = (coords) => {
