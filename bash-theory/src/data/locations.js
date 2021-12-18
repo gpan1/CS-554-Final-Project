@@ -23,23 +23,26 @@ const getAll = async () => {
 }
 
 // tries to add a post ID to a location
-const addPost = async (location, postId) => {
-  if (!validateLocation(location)) throw TypeError("Invalid location");
-  if (!postId) throw TypeError("No post id given");
+const addPost = async (locationId, postId) => {
+    // if (!validateLocation(location)) throw TypeError("Invalid location");
+    if (!postId) throw TypeError("No post id given");
+    //check if location exists in database
+    await getLocById(locationId);
+    const locs = await locations();
 
-  const locs = await locations();
-
-  try {
-    let _postId = checkId(postId);
-    const updateResult = locs.findOneAndUpdate(
-      { location },
-      { $push: { posts: _postId } },
-      { returnNewDocument: true });
-    if (!updateResult) throw Error("Failed to add post to location");
-    return updateResult;
-  } catch (e) {
-    throw Error("Failed to add post to location: " + e);
-  };
+    try {
+        let _postId = checkId(postId);
+        let _locId = checkId(locationId);
+        const updateResult = locs.findOneAndUpdate(
+        // { location },
+        {_id: _locId},
+        { $push: { posts: _postId } },
+        { returnNewDocument: true });
+        if (!updateResult) throw Error("Failed to add post to location");
+        return updateResult;
+    } catch (e) {
+        throw Error("Failed to add post to location: " + e);
+    };
 }
 
 const create = async (args) => {

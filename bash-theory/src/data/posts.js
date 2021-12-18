@@ -137,6 +137,7 @@ const create = async (args) => {
         };
         const loc = await locations.getLocById(newObj.locationId);
         newObj.locationId = ObjectId(newObj.locationId);
+        
     } catch (e) {
         console.log(`Creating post failed: ${e}`);
         return { error: e };
@@ -144,8 +145,8 @@ const create = async (args) => {
     const postCol = await posts();
     const { insertedId } = await postCol.insertOne(newObj);
     if (!insertedId) throw Error("Failed to create post");
-    newObj._id = insertedId.toString();
-
+    const res = idToStr(newObj);
+    await locations.addPost(res.locationId,res._id);
     // do not attempt adding location when a post is made for a nonexisting one
 
     // // if location hasn't been added, attempt adding
@@ -163,7 +164,7 @@ const create = async (args) => {
     //     }
     // }
     await client.zaddAsync('popular', 1, newObj._id);
-    return idToStr(newObj);
+    return res;
 }
 
 const addComment = async (args) => {
