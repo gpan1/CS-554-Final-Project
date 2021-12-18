@@ -6,26 +6,22 @@ import {
 } from "react-router-dom";
 import Map from "./components/Map";
 import Home from './components/Home';
+
 import "./App.css";
+
+import Landing from "./components/Landing";
+import ItemDetails from "./components/ItemDetails";
+import ItemListing from "./components/ItemListing";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path="/" element={<Landing />} />
+        <Route exact path="*" element={<ErrorPage />} />
+      </Routes>
+    </Router>
   );
 }
 
