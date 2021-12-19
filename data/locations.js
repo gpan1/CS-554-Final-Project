@@ -105,7 +105,6 @@ const create = async (args) => {
  */
 const getLocById = async (id) => {
   try {
-    console.log(id);
     let parsedId = checkId(id);
     let locCol = await locations();
     const loc = await locCol.findOne({ _id: parsedId });
@@ -257,7 +256,8 @@ const locSearch = async (args) => {
     // await post.forEach(console.log);
     return res;
   } catch (e) {
-    console.log(`Location search failed: ${e}`);
+    console.log(`Location search error:`);
+    console.log(e);
     return { error: e };
   }
 };

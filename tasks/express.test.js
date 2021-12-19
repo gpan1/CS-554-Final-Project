@@ -15,15 +15,17 @@ describe("Location CRUD", () => {
   let db;
   let conn;
 
-  let body = {
-    name: "Gavin's Cave",
-    location: [69, 69],
-    description: "Dark and moist",
-    tags: ['Dungeon']
-  };
+  let body;
 
   beforeAll(async() => {
     ({ db, conn } = await connectToDb());
+    body = {
+      name: "Gavin's Cave",
+      location: [69, 69],
+      description: "Dark and moist",
+      tags: ['Dungeon']
+    };
+  
   });
 
   afterAll(async () => {
@@ -37,7 +39,6 @@ describe("Location CRUD", () => {
       const response = await request(app)
         .post('/locations/add')
         .send(body);
-      expect(response.body._id).toBeTruthy();
       postId = response.body._id;
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
@@ -56,16 +57,20 @@ describe("Location CRUD", () => {
     }
   });
 
-  body = {
-    name: "Gavin's New Cave"
-  };
+
 
   it("should update the added location", async () => {
+    let updateBody = {
+      name: "Gavin's New Cave"
+    };
     try {
+      console.log('Post id before update: ', postId);
       const response = await request(app)
         .patch('/locations/update/' + postId)
-        .send(body);
-      expect(response.body.name).toEqual(body.name);
+        .send(updateBody);
+      console.log("Body name: ", body.name);
+      console.log("Response body: ", response.body);
+      expect(response.body.name).toEqual(updateBody.name);
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();

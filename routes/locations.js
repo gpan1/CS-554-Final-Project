@@ -17,6 +17,7 @@ router.post('/add', async (req, res) => {
     let all = await data.create(req.body);
     return res.json(all);
   } catch (e) {
+    console.log(e);
     return res.status(
       e instanceof TypeError ? 400 : 
       e instanceof Error ? 404 : 500)
@@ -44,6 +45,7 @@ router.get('/byId/:id', async (req, res) => {
 });
 
 router.patch('/update/:id', async (req, res) => {
+  console.log("In patch route: ", req.params.id);
   try {
     let all = await data.update(req.params.id, req.body);
     return res.json(all);

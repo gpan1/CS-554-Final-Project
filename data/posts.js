@@ -236,7 +236,8 @@ const getPostsByTags = async (tags) => {
       .toArray();
     return matches.map((x) => idToStr(x));
   } catch (e) {
-    console.log("getPostsByTags encountered error: ", JSON.stringify(e));
+    console.log(`getPostsByTags encountered error: ${e}`);
+    return null;
   }
 };
 

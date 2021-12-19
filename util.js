@@ -33,13 +33,12 @@ const validateUrl = url => {
 const validateLocation = (location) => {
   if (!validateStr(location.name)
     || !validateStr(location.description)
-    || !validateCoordinates(location.location))
+    || !validateCoordinates(location.location)) 
+      return false;
+    
+  if (location.tags && !validateArray(location.tags, validateStr))
     return false;
-  if (location.tags){
-    for(let t of location.tags){
-      if(!validateStr(t)) return false;
-    }
-  }
+    
   return true;
 }
 
