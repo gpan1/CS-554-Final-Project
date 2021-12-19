@@ -1,8 +1,11 @@
 import {
+  NavLink,
   BrowserRouter as Router,
   Route,
   Routes,
 } from "react-router-dom";
+import Map from "./components/Map";
+import Home from './components/Home';
 
 import "./App.css";
 
