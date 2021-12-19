@@ -1,7 +1,6 @@
 const { validateLocation, checkId, validateCoordinates,
    validateStr, idToStr, validateArray } = require('../util')
 const { locations } = require('../config/mongoCollections');
-const posts = require("../data/posts");
 /**
  * Location schema:
  * coords!: [Number, Number]    \\ (longitude, latitude)
@@ -25,10 +24,16 @@ const getAll = async () => {
 const updateRating = async (id) => {
     try{
         const loc = await getLocById(id);
-        const posts = loc.posts;
-        for(let post of posts){
-            
+        const postList = loc.posts;
+        let acc = 0;
+        let cnt = 0;
+        for(let pid of postList){
+            const post = await posts.postById(pid.toString());
+            acc += post.rating;
+            cnt++;
         }
+        acc = acc/cnt;
+
     } catch(e){
 
     }
@@ -202,7 +207,8 @@ const locSearch = async (args) => {
         // for order: 1 is ascending, -1 is descending
         if (args.sort){
             if (!Array.isArray(args.sort)) throw TypeError(`Invalid sort: ${args.sort}`);
-            validateStr(args.sort[0]);
+            if (!validateStr(args.sort[0])) throw TypeError(`Invalid sort field: ${args.sort[0]}`);
+
             let order = 1;
             if (args.sort.length > 1){
                 // if the sort option is invalid, just use default of 1
@@ -213,7 +219,7 @@ const locSearch = async (args) => {
             sorting = {};
             sorting[`${args.sort[0]}`] = order;
         }
-        let postCol = await posts();
+        let locCol = await locations();
         const query = { 
             "name": { $regex: `${args.term}` },
             "tags": { $in: tags }    
@@ -223,9 +229,9 @@ const locSearch = async (args) => {
             sort: sorting
             // projection: { _id: 0, title: 1, imdb: 1 },
           };
-        const post = await postCol.find(query);
-        if (post === null) throw Error('No location match');
-        await post.forEach((x)=>{
+        const locations = await locCol.find(query,options);
+        if (locations === null) throw Error('No location match');
+        await location.forEach((x)=>{
             res.push(idToStr(x));
         } );
         // await post.forEach(console.log);
