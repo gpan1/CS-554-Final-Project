@@ -82,15 +82,69 @@ const getLocById = async (id) => {
 const getByCoords = (coords) => {
   if (!validateCoordinates(coords)) 
     throw TypeError("Invalid coordinates; expected [longitude, latitude]");
-  // todo
+  // todo ???
 
+}
+
+/**
+ * Updates a location.
+ * 
+ * Cannot change the posts associated with it.
+ * @param {string} id 
+ * @param {object} args 
+ * @returns {object} updated result
+ */
+const update = (id, args) => {
+  let parsedId = checkId(id);
+  if (!args || JSON.stringify(args) === "{}") 
+    throw TypeError(`updateLocation expected args, got nothing`);
+  
+  const updateObj = {};
+
+  if (args.name) {
+    if (!validateStr(args.name))
+      throw TypeError(`updateLocation invalid name: ${args.name}`);
+    updateObj.name = args.name;
+  }
+
+  if (args.description) { 
+    if (!validateStr(args.description))
+      throw TypeError(`updateLocation invalid description: ${args.description}`);
+    updateObj.name = args.description;
+  }
+
+  if (args.tags) {
+    if (!validateArray(args.tags, validateStr))
+      throw TypeError(`updateLocation invalid name: ${args.name}`);
+    updateObj.tags = args.tags;
+  }
+
+  if (args.location) {
+    if (!validateCoordinates(args.location))
+      throw TypeError(`updateLocation invalid name: ${args.name}`);
+    updateObj.location = args.location;    
+  }
+
+  const locationCol = await locations();
+  try {
+    const result = await locationCol.findOneAndUpdate(
+      {_id: parsedId},
+      {$set: updateObj},
+      {returnOriginal: false});
+    if (!result.value)
+      throw Error("Document not found");
+    return idToStr(result.value);
+  } catch (e) {
+    console.log('updateLocation encountered error: ', JSON.stringify(e));
+  }
 }
 
 module.exports = {
   getAll,
   create,
   addPost,
-  getByCoords,
+  update,
+  // getByCoords,
   getLocById
   // getById,
   // getByPosterName
