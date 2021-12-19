@@ -297,7 +297,6 @@ const update = async (id, args) => {
       throw TypeError(`post update invalid image url: ${args.imgUrl}`);
     newObj.imgUrl = args.imgUrl;
   }
-
   const postCol = await posts();
   try {
     const result = await postCol.updateOne(
