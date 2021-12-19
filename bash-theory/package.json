@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "bluebird": "^3.7.2",
     "bootstrap": "^5.1.3",
     "mongodb": "^4.2.0",
     "react": "^17.0.2",
@@ -14,13 +15,15 @@
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
+    "redis": "^3.1.2",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest --forceExit",
+    "eject": "react-scripts eject",
+    "seed": "node ./src/tasks/seed.js"
   },
   "eslintConfig": {
     "extends": [
@@ -39,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@shelf/jest-mongodb": "^2.1.1"
   }
 }
