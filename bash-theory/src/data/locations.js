@@ -1,5 +1,5 @@
 const { validateLocation, checkId, validateCoordinates,
-   validateStr, idToStr, validateArr } = require('../util')
+   validateStr, idToStr, validateArray } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
 /**
