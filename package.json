@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
-    "test": "jest --forceExit",
+    "test-seed": "jest tasks/seed.test.js --forceExit",
+    "test-express": "jest tasks/express.test.js --forceExit",
     "seed": "node ./tasks/seed.js"
   },
   "repository": {
