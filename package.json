@@ -9,9 +9,6 @@
     "test-express": "jest tasks/express.test.js --forceExit",
     "seed": "node ./tasks/seed.js"
   },
-  "jest": {
-    "maxWorkers": 1
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gpan1/CS-554-Final-Project.git"
