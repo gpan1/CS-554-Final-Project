@@ -3,7 +3,7 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
 import "../App.css";
 import { Button, Modal } from "react-bootstrap";
-const locationData = require("../data/locations");
+import axios from "axios";
 
 const containerStyle = {
   width: "100%",
@@ -61,15 +61,16 @@ function Map() {
     // On Load
     let fetchData = async () => {
       try {
-        // let data = await locationData.getAll();
-        let data = [
+        let { data } = await axios.get("localhost:4000/all");
+        console.log(data);
+        let result = [
           {
             name: "Karma Kafe",
             description: "Good food",
             location: [-74.02905, 40.74237],
           },
         ];
-        let res = data.map((marker) => {
+        let res = result.map((marker) => {
           marker.location = {
             lat: marker.location[1],
             lng: marker.location[0],
