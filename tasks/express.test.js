@@ -61,6 +61,17 @@ describe("Location CRUD", () => {
     }
   });
 
+  it("should retrieve both the added locations", async () => {
+    try {
+      const response = await request(app)
+        .get('/locations/all');
+      expect(response.body.length).toEqual(2);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+
   it("should retrieve added location by id", async () => {
     try {
       const response = await request(app)
