@@ -13,7 +13,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Landing />} />
         <Route exact path="/item/:id" element={<ItemDetails />} />
-        <Route exact path="/listing" element={<ItemListing />} />
+        <Route exact path="/listing/:type" element={<ItemListing />} />
         <Route exact path="*" element={<ErrorPage />} />
       </Routes>
     </Router>
