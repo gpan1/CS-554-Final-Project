@@ -2,7 +2,8 @@
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
 import "../App.css";
-// import itemData from "../../../data/items"; // This will be for when the data functions get implemented.
+import { Button, Modal } from "react-bootstrap";
+const locationData = require("../data/locations");
 
 const containerStyle = {
   width: "100%",
@@ -19,29 +20,68 @@ function Map() {
   // Set states
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [locData, setLocData] = useState(undefined);
+  const [locData, setLocData] = useState([]);
 
-  let renderData = () => {
-    //TODO: Implement
-    console.log("rendering");
-  };
+  // This state holds the information for the modal's rendering.
+  const [show, setShow] = useState({
+    show: false,
+    data: { name: "", description: "" },
+  });
 
-  let travel = () => {
-    //TODO: Implement
+  // Handler functions for the modal.
+  const handleClose = () =>
+    setShow({ show: false, data: { name: "", description: "" } });
+  const handleShow = (props) => setShow({ show: true, data: props });
+
+  const travel = () => {
+    //TODO: Implement a method of redirecting the user to the item's page.
     console.log("travelling");
   };
+
+  // Generate a modal on click of a marker.
+  // This modal will display information on the corresponding item and give the option to navigate to the item page.
+  const modal = (
+    <Modal show={show.show} onHide={handleClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>{show.data.name}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{show.data.description}</Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>
+          Close
+        </Button>
+        <Button variant="primary" onClick={travel}>
+          Travel
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
 
   useEffect(() => {
     // On Load
     let fetchData = async () => {
       try {
-        let data = [{ location: { lat: 40.74237, lng: -74.02905 } }]; // = await itemData.getMarkerData();
-        setLocData(data);
+        // let data = await locationData.getAll();
+        let data = [
+          {
+            name: "Karma Kafe",
+            description: "Good food",
+            location: [-74.02905, 40.74237],
+          },
+        ];
+        let res = data.map((marker) => {
+          marker.location = {
+            lat: marker.location[1],
+            lng: marker.location[0],
+          };
+          return marker;
+        });
+        setLocData(res);
         setLoading(false);
         setError(false);
       } catch (e) {
-        setLocData(e);
         setError(true);
+        setLoading(false);
       }
     };
     fetchData();
@@ -52,21 +92,33 @@ function Map() {
   } else if (error) {
     return <h2>Error: {locData}</h2>;
   } else {
+    // This renders the map and the modal.
+    // I have decided to make the PoIs from Google non-clickable as it'd potentially interfere with our markers.
     return (
-      <LoadScript googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}>
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={15}>
-          {locData.map((data) => {
-            return (
-              <Marker
-                position={data.location}
-                onClick={() => renderData()}
-                onDblClick={() => travel()}
-              ></Marker>
-            );
-          })}
-          <></>
-        </GoogleMap>
-      </LoadScript>
+      <div>
+        <LoadScript
+          googleMapsApiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
+        >
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={center}
+            zoom={15}
+            clickableIcons={false}
+          >
+            {locData.map((data) => {
+              return (
+                <Marker
+                  position={data.location}
+                  onClick={() => handleShow(data)}
+                  onDblClick={() => travel()}
+                ></Marker>
+              );
+            })}
+            <></>
+          </GoogleMap>
+        </LoadScript>
+        {modal}
+      </div>
     );
   }
 }
