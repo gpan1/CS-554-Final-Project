@@ -69,8 +69,10 @@ let validateDate = (date) => {
     || !date.getTime
     // invalid dates produce NaN when getTime() is called
     // NaN is never equal to itself
-    || (date.getTime() !== date.getTime()))
+    || (date.getTime() !== date.getTime())
+    ){
     return false;
+    }
   return true;
 }
 

@@ -31,6 +31,9 @@ router.get('/popular', async(req, res) => {
 
 router.post('/add', async(req, res) => {
     try{
+        const date = req.body.date;
+        const parsedDate = new Date(date);
+        req.body.date = parsedDate;
         let all = await data.create(req.body);
         return res.json(all);
     } catch(e) {
@@ -40,6 +43,9 @@ router.post('/add', async(req, res) => {
 
 router.post('/addComment', async(req, res) => {
     try{
+        const date = req.body.date;
+        const parsedDate = new Date(date);
+        req.body.date = parsedDate;
         let all = await data.addComment(req.body);
         return res.json(all);
     } catch(e) {
@@ -75,9 +81,9 @@ router.post('/remove/:id', async(req, res) => {
     }
 });
 
-router.get('/search', async(req, res) => {
+router.post('/search', async(req, res) => {
     try{
-        let all = data.postSearch(req.body);
+        let all = await data.postSearch(req.body);
         return res.json(all);
     } catch(e) {
         return res.status.json({ error: e});
