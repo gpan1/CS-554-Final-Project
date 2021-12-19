@@ -8,7 +8,7 @@ const postsData = require("../data/posts");
 
 const redis = require("redis");
 const bluebird = require("bluebird");
-const client = redis.createClient();
+let client;
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
@@ -18,6 +18,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -29,6 +30,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should insert a post into database", async () => {
@@ -51,6 +53,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -62,6 +65,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should get all posts in database", async () => {
@@ -89,6 +93,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -100,6 +105,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be getting a post by id", async () => {
@@ -137,6 +143,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -148,6 +155,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be adding a comment to a post", async () => {
@@ -181,6 +189,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -192,6 +201,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be removing a post", async () => {
@@ -233,6 +243,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -244,6 +255,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be updating a post", async () => {
@@ -275,6 +287,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -286,6 +299,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should insert a location into database", async () => {
@@ -304,6 +318,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -315,6 +330,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should get all locations in database", async () => {
@@ -338,6 +354,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -349,6 +366,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be getting a location by id", async () => {
@@ -378,6 +396,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -389,6 +408,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be removing a location", async () => {
@@ -422,6 +442,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -433,6 +454,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be updating a location", async () => {
@@ -459,6 +481,7 @@ describe("insert", () => {
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -470,6 +493,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be adding a post ID to a location", async () => {
@@ -504,11 +528,13 @@ describe("insert", () => {
   });
 });
 
+// Testing popular cache functionality.
 describe("insert", () => {
   let connection;
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -520,6 +546,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be adding a post to the popular cache", async () => {
@@ -546,11 +573,13 @@ describe("insert", () => {
   });
 });
 
+// Testing popularity increasing.
 describe("insert", () => {
   let connection;
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -562,6 +591,7 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be incrementing popularity based on getting the id", async () => {
@@ -590,9 +620,9 @@ describe("insert", () => {
         locationId: id._id,
       });
       const data = await postsData.getAll();
+      await postsData.getPostById(data[0]._id);
       await postsData.getPostById(data[1]._id);
-      await postsData.getPostById(data[2]._id);
-      const result = await postsData.getPostById(data[2]._id);
+      const result = await postsData.getPostById(data[1]._id);
       const posts = await postsData.getPopularPosts();
       expect(posts[0]).toBe(result._id);
     } catch (e) {
@@ -601,11 +631,13 @@ describe("insert", () => {
   });
 });
 
+// Testing searching by title
 describe("insert", () => {
   let connection;
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -617,18 +649,19 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be getting the correct post from the title search parameters", async () => {
     try {
-      const id = await locations.create({
+      const id = await locData.create({
         name: "Babbio",
         location: [1, 1],
         tags: ["Building"],
         description:
           "Academic building located at the southside of Campus, mainly used for Businees Tech classes.",
       });
-      const p1 = await posts.create({
+      const p1 = await postsData.create({
         posterName: "J",
         title: "Babbio big",
         content: "This building can fit so many gamers in it",
@@ -638,7 +671,7 @@ describe("insert", () => {
         tags: ["Building"],
         rating: 5,
       });
-      await posts.create({
+      await postsData.create({
         posterName: "J",
         title: "Dabbio",
         content: "Oops, a typo.",
@@ -649,7 +682,7 @@ describe("insert", () => {
         rating: 3.5,
       });
 
-      const s1 = await posts.postSearch({
+      const s1 = await postsData.postSearch({
         term: "Ba",
         tags: ["Building", "Eating Spot"],
         sort: ["title", 1],
@@ -661,11 +694,13 @@ describe("insert", () => {
   });
 });
 
+// Testing tag searching
 describe("insert", () => {
   let connection;
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -677,18 +712,19 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be getting the correct post from the tags search parameters", async () => {
     try {
-      const id = await locations.create({
+      const id = await locData.create({
         name: "Babbio",
         location: [1, 1],
         tags: ["Building"],
         description:
           "Academic building located at the southside of Campus, mainly used for Businees Tech classes.",
       });
-      const p1 = await posts.create({
+      const p1 = await postsData.create({
         posterName: "J",
         title: "Babbio big",
         content: "This building can fit so many gamers in it",
@@ -698,7 +734,7 @@ describe("insert", () => {
         tags: ["Building"],
         rating: 5,
       });
-      await posts.create({
+      await postsData.create({
         posterName: "J",
         title: "Baabbio",
         content: "Oops, a typo.",
@@ -709,7 +745,7 @@ describe("insert", () => {
         rating: 3.5,
       });
 
-      const s1 = await posts.postSearch({
+      const s1 = await postsData.postSearch({
         term: "Ba",
         tags: ["Building", "Eating Spot"],
         sort: ["title", 1],
@@ -721,11 +757,13 @@ describe("insert", () => {
   });
 });
 
+// Testing sorting when searching.
 describe("insert", () => {
   let connection;
   let db;
 
   beforeAll(async () => {
+    client = redis.createClient();
     connection = await MongoClient.connect(mongoConfig.serverUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -737,18 +775,19 @@ describe("insert", () => {
     await db.dropDatabase();
     await connection.close();
     await client.flushallAsync();
+    await client.quitAsync();
   });
 
   it("should be getting the correct post from the search parameters in the correct order", async () => {
     try {
-      const id = await locations.create({
+      const id = await locData.create({
         name: "Babbio",
         location: [1, 1],
         tags: ["Building"],
         description:
           "Academic building located at the southside of Campus, mainly used for Businees Tech classes.",
       });
-      await posts.create({
+      await postsData.create({
         posterName: "J",
         title: "Babbio big",
         content: "This building can fit so many gamers in it",
@@ -758,7 +797,7 @@ describe("insert", () => {
         tags: ["Building"],
         rating: 5,
       });
-      const p2 = await posts.create({
+      const p2 = await postsData.create({
         posterName: "J",
         title: "Baabbio",
         content: "Oops, a typo.",
@@ -769,7 +808,7 @@ describe("insert", () => {
         rating: 3.5,
       });
 
-      const s1 = await posts.postSearch({
+      const s1 = await postsData.postSearch({
         term: "Ba",
         tags: ["Building", "Eating Spot"],
         sort: ["title", 1],
