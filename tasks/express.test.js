@@ -173,7 +173,6 @@ describe("Location search", () => {
       const response = await request(app)
         .post('/locations/search')
         .send(body);
-      console.log(response.body);
       expect(response.body[0].name).toEqual(body.term);
     } catch (e) {
       console.log(e);
@@ -181,7 +180,23 @@ describe("Location search", () => {
     }
   });
 
-})
+  it("should successfully find loc2 from a tag search", async () => {
+    const body = {
+      term: 'loc',
+      tags: ['Eating Spot', 'Class']
+    };
+
+    try {
+      const response = await request(app)
+        .post('/locations/search')
+        .send(body);
+      expect(response.body[0].name).toEqual('loc2');
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+});
 
 
 /**
