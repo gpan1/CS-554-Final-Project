@@ -12,7 +12,7 @@ router.get('/all', async (req, res) => {
   }
 });
 
-router.get('/add', async (req, res) => {
+router.post('/add', async (req, res) => {
   try {
     let all = await data.create(req.body);
     return res.json(all);

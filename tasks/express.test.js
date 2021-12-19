@@ -3,24 +3,23 @@
  */
 const axios = require('axios');
 const endpoint = "http://localhost:4000";
+const app = require('../app');
+const request = require('supertest');
 
 // for dropping DB
-const { MongoClient, Collection } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const settings = require("../config/settings");
 const mongoConfig = settings.mongoConfig;
 
-describe("insert", () => {
+describe("Location insert", () => {
   let db;
   let conn;
 
-  const config = {
-    url: endpoint + "/locations/add",
-    data: {
-      name: "Gavin's Cave",
-      location: [69, 69],
-      description: "Dark and moist",
-      tags: ['Dungeon']
-    }
+  let body = {
+    name: "Gavin's Cave",
+    location: [69, 69],
+    description: "Dark and moist",
+    tags: ['Dungeon']
   };
 
   beforeAll(async() => {
@@ -28,13 +27,15 @@ describe("insert", () => {
   });
 
   afterAll(async () => {
-    cleanUp(db, conn);
+    await cleanUp(db, conn);
   })
   
   it("should add a location", async () => {
     try {
-      const { data } = await axios(config);
-      expect(data.name).toEqual(config.data.name);
+      const response = await request(app)
+        .post('/locations/add')
+        .send(body);
+      expect(response.body.name).toEqual(body.name);
     } catch (e) {
       expect(e).toMatch("nothing because this shouldnt fail");
     }
