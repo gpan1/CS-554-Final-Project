@@ -55,6 +55,22 @@ describe("Location CRUD", () => {
       expect(e).toBeFalsy();
     }
   });
+
+  body = {
+    name: "Gavin's New Cave"
+  };
+
+  it("should update the added location", async () => {
+    try {
+      const response = await request(app)
+        .patch('/locations/update/' + postId)
+        .send(body);
+      expect(response.body.name).toEqual(body.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
 });
 
 /**

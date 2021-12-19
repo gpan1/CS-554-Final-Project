@@ -35,6 +35,7 @@ router.get('/addPost', async (req, res) => {
 
 router.get('/byId/:id', async (req, res) => {
   try {
+    console.log(req.params.id);
     let all = await data.getLocById(req.params.id);
     return res.json(all);
   } catch (e) {
@@ -42,7 +43,7 @@ router.get('/byId/:id', async (req, res) => {
   }
 });
 
-router.get('/update/:id', async (req, res) => {
+router.patch('/update/:id', async (req, res) => {
   try {
     let all = await data.update(req.params.id, req.body);
     return res.json(all);

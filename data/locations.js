@@ -104,6 +104,7 @@ const create = async (args) => {
  */
 const getLocById = async (id) => {
   try {
+    console.log(id);
     let parsedId = checkId(id);
     let locCol = await locations();
     const loc = await locCol.findOne({ _id: parsedId });
