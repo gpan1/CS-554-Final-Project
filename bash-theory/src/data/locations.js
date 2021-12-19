@@ -1,4 +1,5 @@
-const { validateLocation, checkId, validateCoordinates, validateStr, idToStr } = require('../util')
+const { validateLocation, checkId, validateCoordinates,
+   validateStr, idToStr, validateArr } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
 /**
@@ -153,7 +154,7 @@ const remove = async (id) => {
 
   try {
     const result = await locationCol.deleteOne({ _id: parsedId });
-    if (result.deletedCount == 0)
+    if (result.deletedCount === 0)
       return false;
     return true;
   } catch (e) {
