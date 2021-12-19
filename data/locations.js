@@ -209,11 +209,12 @@ const locSearch = async (args) => {
   let res = [];
   let tags = ["Building", "Class", "Eating Spot", "Professor"];
   let sorting = { name: 1 };
+  const validFields = ['name', 'avgRating'];
   try {
-    validateStr(args.term);
+    if (!validateStr(args.term)) throw TypeError(`Invalid term: ${args.term}`);
     if (args.tags) {
       for (let t of args.tags) {
-        validateStr(t);
+        if(!validateStr(t)) throw TypeError(`Invalid tag: ${t}`);
       }
       tags = args.tags;
     }
@@ -224,7 +225,8 @@ const locSearch = async (args) => {
         throw TypeError(`Invalid sort: ${args.sort}`);
       if (!validateStr(args.sort[0]))
         throw TypeError(`Invalid sort field: ${args.sort[0]}`);
-
+      if (!validFields.includes(args.sort[0])) 
+        throw TypeError(`Invalid sort field: ${args.sort[0]}`);
       let order = 1;
       if (args.sort.length > 1) {
         // if the sort option is invalid, just use default of 1
@@ -235,7 +237,7 @@ const locSearch = async (args) => {
       sorting = {};
       sorting[`${args.sort[0]}`] = order;
     }
-    let locCol = await locations();
+    const locCol = await locations();
     const query = {
       name: { $regex: `${args.term}` },
       tags: { $in: tags },
@@ -245,9 +247,10 @@ const locSearch = async (args) => {
       sort: sorting,
       // projection: { _id: 0, title: 1, imdb: 1 },
     };
-    const locations = await locCol.find(query, options);
-    if (locations === null) throw Error("No location match");
-    await locations.forEach((x) => {
+    
+    const location = await locCol.find(query, options);
+    if (location === null) throw Error("No location match");
+    await location.forEach((x) => {
       res.push(idToStr(x));
     });
     // await post.forEach(console.log);

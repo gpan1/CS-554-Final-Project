@@ -92,11 +92,16 @@ async function main() {
     console.log(Howe);
     const HowePosts = await posts.getByList(Howe.posts);
     console.log(HowePosts);
+    const s2 = await locations.locSearch({
+        term:'a',
+        tags:['Building','Eating Spot'],
+        sort: ['avgRating',-1]
+    });
+    console.log(s2);
+
 
     await dbConnection.closeConnection();
     console.log("Done seeding database");
-    
-    
 }
 
 main();

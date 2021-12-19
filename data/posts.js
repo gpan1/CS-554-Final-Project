@@ -109,11 +109,12 @@ const postSearch = async (args) => {
   let res = [];
   let tags = ["Building", "Class", "Eating Spot", "Professor"];
   let sorting = { title: 1 };
+  const validFields = ['title', 'posterName', 'rating', 'date'];
   try {
-    validateStr(args.term);
+    if (!validateStr(args.term)) throw TypeError(`Invalid term: ${args.term}`);
     if (args.tags) {
       for (let t of args.tags) {
-        validateStr(t);
+        if(!validateStr(t)) throw TypeError(`Invalid tag: ${t}`);
       }
       tags = args.tags;
     }
@@ -122,7 +123,10 @@ const postSearch = async (args) => {
     if (args.sort) {
       if (!Array.isArray(args.sort))
         throw TypeError(`Invalid sort: ${args.sort}`);
-      validateStr(args.sort[0]);
+        if (!validateStr(args.sort[0]))
+        throw TypeError(`Invalid sort field: ${args.sort[0]}`);
+      if (!validFields.includes(args.sort[0])) 
+        throw TypeError(`Invalid sort field: ${args.sort[0]}`);
       let order = 1;
       if (args.sort.length > 1) {
         // if the sort option is invalid, just use default of 1
