@@ -1,4 +1,4 @@
-const {checkPost, validateLocation, checkId, 
+const {checkPost, validateLocation, checkId, validateNum, 
   idToStr, checkComment, validateStr, 
   validateCoordinates, validateArray, validateUrl} = require('../util')
 const { posts } = require('../config/mongoCollections');

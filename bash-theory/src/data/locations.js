@@ -28,7 +28,7 @@ const updateRating = async (id) => {
         let acc = 0;
         let cnt = 0;
         for(let pid of postList){
-            const post = await posts.postById(pid.toString());
+            
             acc += post.rating;
             cnt++;
         }
