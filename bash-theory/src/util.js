@@ -35,6 +35,11 @@ const validateLocation = (location) => {
     || !validateStr(location.description)
     || !validateCoordinates(location.location))
     return false;
+  if (location.tags){
+    for(let t of location.tags){
+      if(!validateStr(t)) return false;
+    }
+  }
   return true;
 }
 

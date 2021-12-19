@@ -9,17 +9,20 @@ async function main() {
     const l1 = await locations.create({
         name: "Muteki Ramen",
         location: [0,1],
+        tags: ['Eating Spot'],
         description: 'Japanese Ramen shop opened in 20xx.'
     })
     console.log(l1);
     const l2 = await locations.create({
         name: "Babbio",
         location: [1,1],
+        tags: ['Building'],
         description: 'Academic building located at the southside of Campus, mainly used for Businees Tech classes.'
     })
     const l3 = await locations.create({
         name: "Howe",
         location: [0,1],
+        tags: ['Building'],
         description: 'Administrative building with many offices. Pierce Dining on second floor'
     })
     const p1 = await posts.create({

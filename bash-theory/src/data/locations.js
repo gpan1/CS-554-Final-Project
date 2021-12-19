@@ -46,18 +46,24 @@ const addPost = async (locationId, postId) => {
 }
 
 const create = async (args) => {
-  if (!args
-    || !validateLocation(args))
-    throw TypeError("Invalid location");
+    if (!args
+        || !validateLocation(args))
+        throw TypeError("Invalid location");
 
-  let newObj = {
-      ...args,
-      posts: []
-    };
-  const locCol = await locations();
-  const { insertedId } = await locCol.insertOne(newObj);
-  if (!insertedId) throw Error("Failed to create location");
-  return idToStr(newObj);
+    let newObj = {
+        name: args.name,
+        location: args.location,
+        description: args.description,
+        tags: [],
+        posts: []
+        };
+    if (args.tags){
+        newObj.tags = args.tags;
+    }
+    const locCol = await locations();
+    const { insertedId } = await locCol.insertOne(newObj);
+    if (!insertedId) throw Error("Failed to create location");
+    return idToStr(newObj);
 }
 /**
 * Checks if the post id is valid and returns with the post if it exists
@@ -84,6 +90,63 @@ const getByCoords = (coords) => {
     throw TypeError("Invalid coordinates; expected [longitude, latitude]");
   // todo
 
+}
+/**
+* Takes in an object that must contain term to search for.
+* Optional fields include tags in the form of an array, ie:['Building', 'Class'],
+* and sorting options in the form of [sortingField, sortingOrder].
+* SortingOrder: 1 is ascending, -1 is descending
+* @param {object} 
+* @return {Array} array of posts matching search
+*/
+const locSearch = async (args) => {
+    let res = [];
+    let tags = ['Building', 'Class', 'Eating Spot', 'Professor'];
+    let sorting = { 'name': 1 };
+    try{
+        validateStr(args.term);
+        if (args.tags){
+            for (let t of args.tags){
+                validateStr(t);
+            }
+            tags = args.tags;
+        }
+        // if sorting is provided it will be in the form [field, order]
+        // for order: 1 is ascending, -1 is descending
+        if (args.sort){
+            if (!Array.isArray(args.sort)) throw TypeError(`Invalid sort: ${args.sort}`);
+            validateStr(args.sort[0]);
+            let order = 1;
+            if (args.sort.length > 1){
+                // if the sort option is invalid, just use default of 1
+                if ((typeof(args.sort[1]) === 'number') && args.sort[1] === -1){
+                    order = -1;
+                }
+            }
+            sorting = {};
+            sorting[`${args.sort[0]}`] = order;
+        }
+        let postCol = await posts();
+        const query = { 
+            "name": { $regex: `${args.term}` },
+            "tags": { $in: tags }    
+        };
+        const options = {
+            // sort returned documents in ascending order by title (A->Z)
+            sort: sorting
+            // projection: { _id: 0, title: 1, imdb: 1 },
+          };
+        const post = await postCol.find(query);
+        if (post === null) throw Error('No location match');
+        await post.forEach((x)=>{
+            res.push(idToStr(x));
+        } );
+        // await post.forEach(console.log);
+        return res;
+    } catch(e){
+        console.log(`Location search failed: ${e}`);
+        return {error: e};
+    }
 }
 
 module.exports = {
