@@ -27,20 +27,20 @@ const getAll = async () => {
   let all = await locCol.find({}).toArray();
   return all;
 };
-const updateRating = async (id) => {
-  try {
-    const loc = await getLocById(id);
-    const postList = loc.posts;
-    let acc = 0;
-    let cnt = 0;
-    for (let pid of postList) {
-      const post = await posts.postById(pid.toString());
-      acc += post.rating;
-      cnt++;
-    }
-    acc = acc / cnt;
-  } catch (e) {}
-};
+// const updateRating = async (id) => {
+//   try {
+//     const loc = await getLocById(id);
+//     const postList = loc.posts;
+//     let acc = 0;
+//     let cnt = 0;
+//     for (let pid of postList) {
+//       const post = await posts.postById(pid.toString());
+//       acc += post.rating;
+//       cnt++;
+//     }
+//     acc = acc / cnt;
+//   } catch (e) {}
+// };
 // tries to add a post ID to a location
 const addPost = async (locationId, postId) => {
   // if (!validateLocation(location)) throw TypeError("Invalid location");
@@ -234,7 +234,7 @@ const locSearch = async (args) => {
     };
     const locations = await locCol.find(query, options);
     if (locations === null) throw Error("No location match");
-    await location.forEach((x) => {
+    await locations.forEach((x) => {
       res.push(idToStr(x));
     });
     // await post.forEach(console.log);
