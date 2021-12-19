@@ -292,6 +292,25 @@ const updatePost = async (id, args) => {
   }
 }
 
+/**
+ * Removes post with given ID, if found
+ * @param {string} postId 
+ * @returns {boolean} whether or not a post was deleted
+ */
+const remove = async (postId) => {
+  let parsedId = checkId(postId);
+  const postCol = await posts();
+  try {
+    let result = await postCol.deleteOne({_id: parsedId});
+    if (result.deletedCount == 0)
+      return false;
+    return true;
+  } catch (e) {
+    console.error(`remove encountered error: ${JSON.stringify(e)}`);
+    return false;
+  }
+}
+
 // /**
 //  * @param coordinate-pair
 //  * @returns all posts within 1 meter of coordinates 
