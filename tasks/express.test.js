@@ -1,13 +1,13 @@
 /**
  * Testing for backend express routes
  */
-const axios = require('axios');
+const axios = require("axios");
 const endpoint = "http://localhost:4000";
-const app = require('../app');
-const request = require('supertest');
+const app = require("../app");
+const request = require("supertest");
 
 // for dropping DB
-const { MongoClient } = require('mongodb');
+const { MongoClient } = require("mongodb");
 const settings = require("../config/settings");
 const mongoConfig = settings.mongoConfig;
 
@@ -15,14 +15,14 @@ describe("Location CRUD", () => {
   let db;
   let conn;
 
-  beforeAll(async() => {
-    ({ db, conn } = await connectToDb());  
+  beforeAll(async () => {
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
     await cleanUp(db, conn);
   });
-  
+
   let postId;
 
   it("should add a location", async () => {
@@ -30,12 +30,10 @@ describe("Location CRUD", () => {
       name: "Gavin's Cave",
       location: [69, 69],
       description: "Dark and moist",
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(body);
+      const response = await request(app).post("/locations/add").send(body);
       postId = response.body._id;
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
@@ -48,12 +46,10 @@ describe("Location CRUD", () => {
       name: "elo hell",
       location: [-69, -69],
       description: "totally real",
-      tags: ['for sure a real place']
+      tags: ["for sure a real place"],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(body);
+      const response = await request(app).post("/locations/add").send(body);
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
       console.log(e);
@@ -63,8 +59,7 @@ describe("Location CRUD", () => {
 
   it("should retrieve both the added locations", async () => {
     try {
-      const response = await request(app)
-        .get('/locations/all');
+      const response = await request(app).get("/locations/all");
       expect(response.body.length).toEqual(2);
     } catch (e) {
       console.log(e);
@@ -74,9 +69,20 @@ describe("Location CRUD", () => {
 
   it("should retrieve added location by id", async () => {
     try {
-      const response = await request(app)
-        .get('/locations/byId/' + postId);
+      const response = await request(app).get("/locations/byId/" + postId);
       expect(response.body._id).toEqual(postId);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+
+  it("should retrieve added location by tags", async () => {
+    try {
+      const response = await request(app)
+        .get("/locations/byTags/")
+        .send(["Dungeon"]);
+      expect(response.body[0]._id).toEqual(postId);
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
@@ -85,11 +91,11 @@ describe("Location CRUD", () => {
 
   it("should update the added location", async () => {
     let updateBody = {
-      name: "Gavin's New Cave"
+      name: "Gavin's New Cave",
     };
     try {
       const response = await request(app)
-        .patch('/locations/update/' + postId)
+        .patch("/locations/update/" + postId)
         .send(updateBody);
       expect(response.body.name).toEqual(updateBody.name);
     } catch (e) {
@@ -100,8 +106,7 @@ describe("Location CRUD", () => {
 
   it("should remove the added location", async () => {
     try {
-      const response = await request(app)
-        .post('/locations/remove/' + postId);
+      const response = await request(app).post("/locations/remove/" + postId);
       expect(response.statusCode).toEqual(200);
     } catch (e) {
       console.log(e);
@@ -111,8 +116,7 @@ describe("Location CRUD", () => {
 
   it("should be unable to get the deleted location", async () => {
     try {
-      const response = await request(app)
-        .get('/locations/byId/' + postId);
+      const response = await request(app).get("/locations/byId/" + postId);
     } catch (e) {
       expect(e.response.statusCode).toEqual(404);
     }
@@ -122,8 +126,8 @@ describe("Location CRUD", () => {
 describe("Location search", () => {
   let db, conn;
 
-  beforeAll(async() => {
-    ({ db, conn } = await connectToDb());  
+  beforeAll(async () => {
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
@@ -132,15 +136,13 @@ describe("Location search", () => {
 
   it("should successfully create two locations", async () => {
     let loc1 = {
-      name: 'loc1',
-      description: 'first one',
-      tags: ['Building', 'Professor'],
-      location: [0,0]
+      name: "loc1",
+      description: "first one",
+      tags: ["Building", "Professor"],
+      location: [0, 0],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(loc1);
+      const response = await request(app).post("/locations/add").send(loc1);
       expect(response.body.name).toEqual(loc1.name);
     } catch (e) {
       console.log(e);
@@ -148,31 +150,27 @@ describe("Location search", () => {
     }
 
     let loc2 = {
-      name: 'loc2',
-      description: 'second one',
-      tags: ['Eating Spot', 'Class'],
-      location: [1, 1]
+      name: "loc2",
+      description: "second one",
+      tags: ["Eating Spot", "Class"],
+      location: [1, 1],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(loc2);
+      const response = await request(app).post("/locations/add").send(loc2);
       expect(response.body.name).toEqual(loc2.name);
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
-    };
+    }
   });
 
   it("should successfully find loc1 from a term search", async () => {
     const body = {
-      term: 'loc1'
+      term: "loc1",
     };
 
     try {
-      const response = await request(app)
-        .post('/locations/search')
-        .send(body);
+      const response = await request(app).post("/locations/search").send(body);
       expect(response.body[0].name).toEqual(body.term);
     } catch (e) {
       console.log(e);
@@ -182,15 +180,13 @@ describe("Location search", () => {
 
   it("should successfully find loc2 from a tag search", async () => {
     const body = {
-      term: 'loc',
-      tags: ['Eating Spot', 'Class']
+      term: "loc",
+      tags: ["Eating Spot", "Class"],
     };
 
     try {
-      const response = await request(app)
-        .post('/locations/search')
-        .send(body);
-      expect(response.body[0].name).toEqual('loc2');
+      const response = await request(app).post("/locations/search").send(body);
+      expect(response.body[0].name).toEqual("loc2");
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
@@ -198,25 +194,25 @@ describe("Location search", () => {
   });
 });
 
-
 /**
  * Wrote this so I don't have to rewrite it in each test case.
  * @returns {object} {db, conn}
  */
 const connectToDb = async () => {
-  let connection = await MongoClient.connect(mongoConfig.serverUrl, 
-    {useNewUrlParser: true,
-    useUnifiedTopology: true});
+  let connection = await MongoClient.connect(mongoConfig.serverUrl, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
   return {
     db: await connection.db(mongoConfig.database),
-    conn: connection
+    conn: connection,
   };
 };
 
 /**
  * Drops database and closes the connection
- * @param {object} db 
- * @param {object} conn 
+ * @param {object} db
+ * @param {object} conn
  */
 const cleanUp = async (db, conn) => {
   await db.dropDatabase();
@@ -231,14 +227,14 @@ describe("Post CRUD", () => {
   let db;
   let conn;
 
-  beforeAll(async() => {
-    ({ db, conn } = await connectToDb());  
+  beforeAll(async () => {
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
     await cleanUp(db, conn);
   });
-  
+
   let locationId;
   let location;
   let postId1;
@@ -248,12 +244,10 @@ describe("Post CRUD", () => {
       name: "Gavin's Cave",
       location: [69, 69],
       description: "Dark and moist",
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(body);
+      const response = await request(app).post("/locations/add").send(body);
       locationId = response.body._id;
       location = response.body.location;
       expect(response.body.name).toEqual(body.name);
@@ -266,16 +260,14 @@ describe("Post CRUD", () => {
       posterName: "Big Dum Dum",
       title: "What a big cave",
       locationId: locationId,
-      location: [1,1],
+      location: [1, 1],
       content: "Its so cavernous in here, I want to set up a fire.",
       date: new Date(),
       rating: 4.5,
-      tags: ['Eating Spot']
+      tags: ["Eating Spot"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(body);
+      const response = await request(app).post("/posts/add").send(body);
       postId1 = response.body._id;
       // console.log(body.date.getTime());
       // console.log(response.body);
@@ -293,12 +285,10 @@ describe("Post CRUD", () => {
       content: "The smell is overwhelming, I feel like I will faint.",
       date: new Date(),
       rating: 1.5,
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(body);
+      const response = await request(app).post("/posts/add").send(body);
       expect(response.body.posterName).toEqual(body.posterName);
     } catch (e) {
       expect(e).toMatch("nothing because this shouldnt fail");
@@ -306,8 +296,7 @@ describe("Post CRUD", () => {
   });
   it("should retrieve added post by id", async () => {
     try {
-      const response = await request(app)
-        .get('/posts/byId/' + postId1);
+      const response = await request(app).get("/posts/byId/" + postId1);
       expect(response.body._id).toEqual(postId1);
     } catch (e) {
       console.log(e);
@@ -319,12 +308,10 @@ describe("Post CRUD", () => {
       postId: postId1,
       posterName: "Dimple",
       content: "No don't set it on fire!",
-      date: new Date()
+      date: new Date(),
     };
     try {
-      const response = await request(app)
-        .post('/posts/addComment')
-        .send(body);
+      const response = await request(app).post("/posts/addComment").send(body);
       console.log(response.body);
       expect(response.body.posterName).toEqual(body.posterName);
     } catch (e) {
@@ -334,11 +321,11 @@ describe("Post CRUD", () => {
   });
   it("should update post", async () => {
     let body = {
-      posterName: "Dimple"
+      posterName: "Dimple",
     };
     try {
       const response = await request(app)
-        .patch('/posts/update/' + postId1)
+        .patch("/posts/update/" + postId1)
         .send(body);
       console.log(response.body);
       expect(response.body.posterName).toEqual(body.posterName);
@@ -349,8 +336,7 @@ describe("Post CRUD", () => {
   });
   it("should remove the added post", async () => {
     try {
-      const response = await request(app)
-        .post('/posts/remove/' + postId1);
+      const response = await request(app).post("/posts/remove/" + postId1);
       expect(response.statusCode).toEqual(200);
     } catch (e) {
       console.log(e);
@@ -359,8 +345,7 @@ describe("Post CRUD", () => {
   });
   it("should be unable to get the deleted post", async () => {
     try {
-      const response = await request(app)
-        .get('/posts/byId/' + postId1);
+      const response = await request(app).get("/posts/byId/" + postId1);
     } catch (e) {
       expect(e.response.statusCode).toEqual(404);
     }
@@ -369,8 +354,8 @@ describe("Post CRUD", () => {
 describe("Post search", () => {
   let db, conn;
 
-  beforeAll(async() => {
-    ({ db, conn } = await connectToDb());  
+  beforeAll(async () => {
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
@@ -385,12 +370,10 @@ describe("Post search", () => {
       name: "Gavin's Cave",
       location: [69, 69],
       description: "Dark and moist",
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(body);
+      const response = await request(app).post("/locations/add").send(body);
       locationId = response.body._id;
       location = response.body.location;
       expect(response.body.name).toEqual(body.name);
@@ -403,16 +386,14 @@ describe("Post search", () => {
       posterName: "Big Dum Dum",
       title: "What a big cave",
       locationId: locationId,
-      location: [1,1],
+      location: [1, 1],
       content: "Its so cavernous in here, I want to set up a fire.",
       date: new Date(),
       rating: 4.5,
-      tags: ['Eating Spot']
+      tags: ["Eating Spot"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(post1);
+      const response = await request(app).post("/posts/add").send(post1);
       postId1 = response.body._id;
       expect(response.body.name).toEqual(post1.name);
     } catch (e) {
@@ -428,12 +409,10 @@ describe("Post search", () => {
       content: "The smell is overwhelming, I feel like I will faint.",
       date: new Date(),
       rating: 1.5,
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(post2);
+      const response = await request(app).post("/posts/add").send(post2);
       postId2 = response.body._id;
       expect(response.body.name).toEqual(post2.name);
     } catch (e) {
@@ -444,13 +423,11 @@ describe("Post search", () => {
 
   it("should successfully find post1 from a term search", async () => {
     const body = {
-      term: 'cave'
+      term: "cave",
     };
 
     try {
-      const response = await request(app)
-        .post('/posts/search')
-        .send(body);
+      const response = await request(app).post("/posts/search").send(body);
       console.log(response.body);
       expect(response.body[0]._id).toEqual(postId1);
     } catch (e) {
@@ -461,14 +438,12 @@ describe("Post search", () => {
 
   it("should successfully find loc2 from a tag search", async () => {
     const body = {
-      term: 'smell',
-      tags: ['Dungeon']
+      term: "smell",
+      tags: ["Dungeon"],
     };
 
     try {
-      const response = await request(app)
-        .post('/posts/search')
-        .send(body);
+      const response = await request(app).post("/posts/search").send(body);
       console.log(response.body);
       expect(response.body[0]._id).toEqual(postId2);
     } catch (e) {
@@ -481,8 +456,8 @@ describe("Post search", () => {
 describe("Post popularity", () => {
   let db, conn;
 
-  beforeAll(async() => {
-    ({ db, conn } = await connectToDb());  
+  beforeAll(async () => {
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
@@ -497,12 +472,10 @@ describe("Post popularity", () => {
       name: "Gavin's Cave",
       location: [69, 69],
       description: "Dark and moist",
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/locations/add')
-        .send(body);
+      const response = await request(app).post("/locations/add").send(body);
       locationId = response.body._id;
       location = response.body.location;
       expect(response.body.name).toEqual(body.name);
@@ -519,12 +492,10 @@ describe("Post popularity", () => {
       content: "Its so cavernous in here, I want to set up a fire.",
       date: new Date(),
       rating: 4.5,
-      tags: ['Eating Spot']
+      tags: ["Eating Spot"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(post1);
+      const response = await request(app).post("/posts/add").send(post1);
       postId1 = response.body._id;
       expect(response.body.name).toEqual(post1.name);
     } catch (e) {
@@ -540,12 +511,10 @@ describe("Post popularity", () => {
       content: "The smell is overwhelming, I feel like I will faint.",
       date: new Date(),
       rating: 1.5,
-      tags: ['Dungeon']
+      tags: ["Dungeon"],
     };
     try {
-      const response = await request(app)
-        .post('/posts/add')
-        .send(post2);
+      const response = await request(app).post("/posts/add").send(post2);
       postId2 = response.body._id;
       expect(response.body.name).toEqual(post2.name);
     } catch (e) {
@@ -558,12 +527,10 @@ describe("Post popularity", () => {
       postId: postId1,
       posterName: "Dimple",
       content: "No don't set it on fire!",
-      date: new Date()
+      date: new Date(),
     };
     try {
-      const response = await request(app)
-        .post('/posts/addComment')
-        .send(body);
+      const response = await request(app).post("/posts/addComment").send(body);
       console.log(response.body);
       expect(response.body.posterName).toEqual(body.posterName);
     } catch (e) {
@@ -573,8 +540,7 @@ describe("Post popularity", () => {
   });
   it("should find popular post", async () => {
     try {
-      const response = await request(app)
-        .get('/posts/popular');
+      const response = await request(app).get("/posts/popular");
       console.log(response.body);
       expect(response.body[0]).toEqual(postId1);
     } catch (e) {

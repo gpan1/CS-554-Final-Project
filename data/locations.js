@@ -36,7 +36,7 @@ const updateRating = async (id) => {
     let cnt = 0;
     const postCol = await posts();
     for (let pid of postList) {
-      const post = await postCol.findOne({ _id: checkId(pid) }); 
+      const post = await postCol.findOne({ _id: checkId(pid) });
       acc += post.rating;
       cnt++;
     }
@@ -45,9 +45,10 @@ const updateRating = async (id) => {
     const parsedId = checkId(id);
     const result = await locCol.updateOne(
       { _id: parsedId },
-      { $set: {avgRating:acc} }
+      { $set: { avgRating: acc } }
     );
-    if (result.modifiedCount === 0 && result.matchedCount === 0) throw Error("Document not found");
+    if (result.modifiedCount === 0 && result.matchedCount === 0)
+      throw Error("Document not found");
     return result;
   } catch (e) {
     throw Error("Failed to update location average rating: " + e);
@@ -79,8 +80,7 @@ const addPost = async (locationId, postId) => {
 };
 
 const create = async (args) => {
-  if (!args || !validateLocation(args))
-    throw TypeError("Invalid location");
+  if (!args || !validateLocation(args)) throw TypeError("Invalid location");
 
   let newObj = {
     name: args.name,
@@ -113,6 +113,38 @@ const getLocById = async (id) => {
     return idToStr(loc);
   } catch (e) {
     return { error: e };
+  }
+};
+
+/**
+ * Given a list of one or more tags, returns all locations that match the tags
+ * Note: this attempts to match ALL given tags; if a post doesn't have ALL
+ * the supplied tags, it will not be included in the result
+ * @param {[string]} tags
+ * @returns All posts matching the tags
+ * @throws TypeError on invalid input
+ */
+const getLocsByTags = async (tags) => {
+  if (!Array.isArray(tags))
+    throw TypeError(`Expected array, got ${tags ? tags : "nothing"}`);
+
+  // validate every tag
+  if (!validateArray(tags, validateStr))
+    throw TypeError("getPostsByTags: not all tags passed string check");
+
+  const locCol = await locations();
+  try {
+    const matches = await locCol
+      .find({
+        tags: {
+          $all: tags,
+        },
+      })
+      .toArray();
+    return matches.map((x) => idToStr(x));
+  } catch (e) {
+    console.log(`getLocsByTags encountered error: ${e}`);
+    return null;
   }
 };
 
@@ -166,13 +198,13 @@ const update = async (id, args) => {
 
     const updated = await locationCol.findOne({ _id: parsedId });
 
-    // if (result.modifiedCount === 0) 
+    // if (result.modifiedCount === 0)
     //   throw Error("Document not found");
 
     return idToStr(updated);
   } catch (e) {
-    console.log('Location update error:');
-    console.log(e)
+    console.log("Location update error:");
+    console.log(e);
   }
 };
 
@@ -208,12 +240,12 @@ const locSearch = async (args) => {
   let res = [];
   let tags = ["Building", "Class", "Eating Spot", "Professor"];
   let sorting = { name: 1 };
-  const validFields = ['name', 'avgRating'];
+  const validFields = ["name", "avgRating"];
   try {
     if (!validateStr(args.term)) throw TypeError(`Invalid term: ${args.term}`);
     if (args.tags) {
       for (let t of args.tags) {
-        if(!validateStr(t)) throw TypeError(`Invalid tag: ${t}`);
+        if (!validateStr(t)) throw TypeError(`Invalid tag: ${t}`);
       }
       tags = args.tags;
     }
@@ -224,7 +256,7 @@ const locSearch = async (args) => {
         throw TypeError(`Invalid sort: ${args.sort}`);
       if (!validateStr(args.sort[0]))
         throw TypeError(`Invalid sort field: ${args.sort[0]}`);
-      if (!validFields.includes(args.sort[0])) 
+      if (!validFields.includes(args.sort[0]))
         throw TypeError(`Invalid sort field: ${args.sort[0]}`);
       let order = 1;
       if (args.sort.length > 1) {
@@ -246,14 +278,14 @@ const locSearch = async (args) => {
       sort: sorting,
       // projection: { _id: 0, title: 1, imdb: 1 },
     };
-    
+
     const location = await locCol.find(query, options);
     if (location === null) throw Error("No location match");
     await location.forEach((x) => {
       res.push(idToStr(x));
     });
 
-    console.log('search result: ', res);
+    console.log("search result: ", res);
 
     // await post.forEach(console.log);
     return res;
@@ -273,7 +305,8 @@ module.exports = {
   // getByCoords,
   getLocById,
   locSearch,
-  updateRating
+  updateRating,
+  getLocsByTags,
   // getById,
   // getByPosterName
 };

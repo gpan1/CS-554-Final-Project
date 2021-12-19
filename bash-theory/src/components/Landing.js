@@ -1,9 +1,12 @@
 import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Map from "./Map";
 import noImage from "../noImage.png";
 function Landing() {
+  let navigate = useNavigate();
+
   return (
     <>
       <Header />
@@ -60,18 +63,38 @@ function Landing() {
             <div className="navButtons">
               <Row>
                 <Col>
-                  <Button variant="navigation">Buildings</Button>
+                  <Button
+                    variant="navigation"
+                    onClick={() => navigate("/listing/building")}
+                  >
+                    Buildings
+                  </Button>
                 </Col>
                 <Col>
-                  <Button variant="navigation">Eating Spots</Button>
+                  <Button
+                    variant="navigation"
+                    onClick={() => navigate("/listing/eatery")}
+                  >
+                    Eating Spots
+                  </Button>
                 </Col>
               </Row>
               <Row>
                 <Col>
-                  <Button variant="navigation">Professors</Button>
+                  <Button
+                    variant="navigation"
+                    onClick={() => navigate("/listing/professor")}
+                  >
+                    Professors
+                  </Button>
                 </Col>
                 <Col>
-                  <Button variant="navigation">Classes</Button>
+                  <Button
+                    variant="navigation"
+                    onClick={() => navigate("/listing/classes")}
+                  >
+                    Classes
+                  </Button>
                 </Col>
               </Row>
             </div>
