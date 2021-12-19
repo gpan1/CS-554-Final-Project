@@ -11,7 +11,7 @@ const { MongoClient } = require('mongodb');
 const settings = require("../config/settings");
 const mongoConfig = settings.mongoConfig;
 
-describe("Location insert", () => {
+describe("Location CRUD", () => {
   let db;
   let conn;
 
@@ -30,14 +30,29 @@ describe("Location insert", () => {
     await cleanUp(db, conn);
   })
   
+  let postId;
+
   it("should add a location", async () => {
     try {
       const response = await request(app)
         .post('/locations/add')
         .send(body);
+      expect(response.body._id).toBeTruthy();
+      postId = response.body._id;
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
       expect(e).toMatch("nothing because this shouldnt fail");
+    }
+  });
+
+  it("should retrieve added location by id", async () => {
+    try {
+      const response = await request(app)
+        .get('/locations/byId/' + postId);
+      expect(response.body.name).toEqual(body.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
     }
   });
 });
