@@ -25,11 +25,15 @@
     "create-react-app": "^4.0.3",
     "express": "^4.17.2",
     "express-server": "^0.7.0",
-    "jest": "^27.4.5",
     "mongodb": "^4.2.2",
     "redis": "^3.0.2"
   },
   "devDependencies": {
-    "@shelf/jest-mongodb": "^2.1.1"
+    "@shelf/jest-mongodb": "^2.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^27.4.5",
+    "superagent": "^6.1.0",
+    "supertest": "^6.1.6"
   }
 }
