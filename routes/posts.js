@@ -40,7 +40,7 @@ router.get('/getPopularPosts', async(req, res) => {
     }
 });
 
-router.get('/pCreate', async(req, res) => {
+router.post('/pCreate', async(req, res) => {
     try{
         let all = await data.create(req.body);
         return res.json(all);
@@ -49,7 +49,7 @@ router.get('/pCreate', async(req, res) => {
     }
 });
 
-router.get('/addComment', async(req, res) => {
+router.post('/addComment', async(req, res) => {
     try{
         let all = await data.addComment(req.body);
         return res.json(all);
@@ -76,7 +76,7 @@ router.get('/getLocById/:id', async(req, res) => {
     }
 });
 
-router.get('/postUpdate/:id', async(req, res) => {
+router.patch('/postUpdate/:id', async(req, res) => {
     try{
         let all = await data.update(req.params.id, req.body);
         return res.json(all);
@@ -85,7 +85,7 @@ router.get('/postUpdate/:id', async(req, res) => {
     }
 });
 
-router.get('/postRemove/:id', async(req, res) => {
+router.post('/postRemove/:id', async(req, res) => {
     try{
         let all = data.remove(req.params.id);
         return res.json(all);
