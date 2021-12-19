@@ -8,7 +8,13 @@ const validateStr = (str) => str && typeof str === 'string'
 */
 const validateNum = (num) => num && typeof num === 'number'
     && num >= 0 && num <= 5;
-// dummy function for validating locations once google maps api is added
+
+
+
+/** Confirms location object is valid before creating
+ * @param {object} -- {name: String, description: String, location: [Number, Number]}
+ * @returns {boolean}
+ */
 const validateLocation = (location) => {
   if (!validateStr(location.name)
     || !validateStr(location.description)
