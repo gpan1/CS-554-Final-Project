@@ -1,4 +1,4 @@
-const { validateLocation, checkId, validateCoordinates } = require('../util')
+const { validateLocation, checkId, validateCoordinates, validateStr, idToStr } = require('../util')
 const { locations } = require('../config/mongoCollections');
 
 /**
@@ -23,23 +23,26 @@ const getAll = async () => {
 }
 
 // tries to add a post ID to a location
-const addPost = async (location, postId) => {
-  if (!validateLocation(location)) throw TypeError("Invalid location");
-  if (!postId) throw TypeError("No post id given");
+const addPost = async (locationId, postId) => {
+    // if (!validateLocation(location)) throw TypeError("Invalid location");
+    if (!postId) throw TypeError("No post id given");
+    //check if location exists in database
+    await getLocById(locationId);
+    const locs = await locations();
 
-  const locs = await locations();
-
-  try {
-    let _postId = checkId(postId);
-    const updateResult = locs.findOneAndUpdate(
-      { location },
-      { $push: { posts: _postId } },
-      { returnNewDocument: true });
-    if (!updateResult) throw Error("Failed to add post to location");
-    return updateResult;
-  } catch (e) {
-    throw Error("Failed to add post to location: " + e);
-  };
+    try {
+        let _postId = checkId(postId);
+        let _locId = checkId(locationId);
+        const updateResult = locs.findOneAndUpdate(
+        // { location },
+        {_id: _locId},
+        { $push: { posts: _postId } },
+        { returnNewDocument: true });
+        if (!updateResult) throw Error("Failed to add post to location");
+        return updateResult;
+    } catch (e) {
+        throw Error("Failed to add post to location: " + e);
+    };
 }
 
 const create = async (args) => {
@@ -47,15 +50,34 @@ const create = async (args) => {
     || !validateLocation(args))
     throw TypeError("Invalid location");
 
-  let newObj = {...args};
+  let newObj = {
+      ...args,
+      posts: []
+    };
   const locCol = await locations();
-
   const { insertedId } = await locCol.insertOne(newObj);
-    
   if (!insertedId) throw Error("Failed to create location");
-
-  return newObj;
+  return idToStr(newObj);
 }
+/**
+* Checks if the post id is valid and returns with the post if it exists
+* Also increments the redis post count for popular posts as someone has visited the post
+* @param {string}
+* @return {object}
+*/
+const getLocById = async (id) => {
+    try {
+      let parsedId = checkId(id);
+      let locCol = await locations();
+      const loc = await locCol.findOne({ _id: parsedId });
+      if (loc === null) throw Error('No loc with that id');
+    //   await client.zincrbyAsync('popular', 1, id);
+      return idToStr(loc);
+    } catch (e) {
+      console.log(`Get location by id failed: ${e}`);
+      return { error: e };
+    }
+  }
 
 const getByCoords = (coords) => {
   if (!validateCoordinates(coords)) 
@@ -68,7 +90,8 @@ module.exports = {
   getAll,
   create,
   addPost,
-  getByCoords
+  getByCoords,
+  getLocById
   // getById,
   // getByPosterName
 }
