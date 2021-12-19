@@ -1,4 +1,4 @@
-const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr} = require('../util')
+const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr, validateCoordinates, validateArray} = require('../util')
 const { posts } = require('../config/mongoCollections');
 const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
 const { ObjectId } = require('mongodb');
@@ -26,7 +26,7 @@ const checkPostId = async (id) => {
         const post = await postCol.findOne({ _id: parsedId });
         if (post === null) return false;
         return true;
-    } catch(e){
+    } catch(e) {
         console.log(`Get post by id failed: ${e}`);
         return {error: e};
     }
@@ -44,7 +44,7 @@ const getPostById = async (id) => {
     const post = await postCol.findOne({ _id: parsedId });
     if (post === null) throw Error('No post with that id');
     await client.zincrbyAsync('popular', 1, id);
-    return post;
+    return idToStr(post);
   } catch (e) {
     console.log(`Get post by id failed: ${e}`);
     return { error: e };
@@ -203,10 +203,8 @@ const getPostsByTags = async (tags) => {
     throw TypeError(`Expected array, got ${tags ? tags : 'nothing'}`);
 
   // validate every tag
-  if (!(tags.reduce(
-    (acc, x) => acc && validateStr(x),
-    true)))
-    throw TypeError("Not all tags passed string check");
+  if (!validateArray(tags, validateStr))
+    throw TypeError("getPostsByTags: not all tags passed string check");
 
   const postCol = await posts();
   try {
@@ -215,11 +213,111 @@ const getPostsByTags = async (tags) => {
         $all: tags
       }
     }).toArray();
-    return matches;  
+    return matches.map(x => idToStr(x));  
   } catch (e) {
     console.log('getPostsByTags encountered error: ', JSON.stringify(e));
   };
 }
+
+/**
+ * Patches a post with given (string) ID
+ * @param {string} id
+ * @param {object} args  
+ * @returns {object} updated post
+ */
+const updatePost = async (id, args) => {
+  if (!id) 
+    throw TypeError("updatePost: expected id");
+
+  const parsedId = checkId(id);
+
+  if (JSON.stringify(args) === "{}") 
+    throw TypeError("updatePost: expected update args");
+
+  const updateObj = {};
+  if (args.title) {
+    if (!validateStr(args.title))
+      throw TypeError(`updatePost invalid title: ${args.title}`);
+    updateObj.title = args.title;
+  }
+
+  if (args.description) {
+    if (!validateStr(args.description)) 
+      throw TypeError(`updatePost invalid description: ${args.decription}`);
+    updateObj.description = args.description;
+  }
+
+  if (args.location) {
+    if (!validateCoordinates(args.location))
+      throw TypeError(`updatePost invalid location: ${args.location}`);
+    updateObj.location = args.location;
+  }
+
+  if (args.posterName) {
+    if (!validateStr(args.posterName))
+      throw TypeError(`updatePost invalid posterName: ${args.posterName}`);
+    updateObj.posterName = args.posterName;
+  }
+
+  if (args.rating) {
+    if (!validateNum(args.rating)) 
+      throw TypeError(`updatePost invalid rating: ${args.rating}`);
+    updateObj.rating = args.rating;
+  }
+
+  if (args.tags) {
+    if (!validateArray(args.tags, validateStr))
+      throw TypeError(`updatePost invalid tags: ${tags}`);
+    updateObj.tags = args.tags;
+  }
+
+  const postCol = await posts();
+  try {
+    const result = postCol.findOneAndUpdate(
+      {_id: parsedId},
+      {$set: updateObj},
+      {returnOriginal: false}
+    );
+
+    if (!result.value)
+      throw Error('Document not found');
+
+    return idToStr(result.value);
+  }
+
+}
+
+// /**
+//  * @param coordinate-pair
+//  * @returns all posts within 1 meter of coordinates 
+//  */
+// const getPostsByLocation = async (location) => {
+//   if (!validateCoordinates(location)) 
+//     throw TypeError("Invalid location");
+
+//   // search for points within 1 meter of given location
+//   const query = {
+//     location: {
+//       $near: {
+//         $geometry: {
+//           type: "Point",
+//           coordinates: location
+//         },
+//         $maxDistance: 1,
+//         $minDistance: 0
+//       }
+//     }
+//   };
+
+//   const postCol = await posts();
+
+//   try {
+//     const matches = await postCol.find(query).toArray();  
+//     return matches;
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 module.exports = {
     getAll,
@@ -228,6 +326,7 @@ module.exports = {
     getPostById,
     postSearch,
     getPopularPosts,
-    getPostsByTags
+    getPostsByTags,
+    // getPostsByLocation
     // getByPosterName
 }

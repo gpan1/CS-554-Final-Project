@@ -8,11 +8,11 @@ const getCollectionFn = (collection) => {
       const db = await dbConnection.connectToDb();
       _col = await db.collection(collection);
 
-      // const locationIndexExists = await _col.indexExists('location_2d');
-      const locationIndexExists = true;
-      // // create a 2D index on [longtitude, latitude] pair 
-      if (collection === 'Locations' && !locationIndexExists)
-        await _col.createIndex({location: "2d"}, {unique:true});
+      // create a 2D index on [longtitude, latitude] pair 
+      // if (collection === 'Posts') {
+      //   if (!await _col.indexExists('location_2d'))
+      //     await _col.createIndex({location: "2d"});
+      //   }
     }
     return _col;
   };

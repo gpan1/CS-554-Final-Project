@@ -68,6 +68,8 @@ let validateDate = (date) => {
     return false;
   return true;
 }
+
+
 let checkComment = (args) => {
     if (!args)
         throw TypeError("No args supplied");
@@ -145,9 +147,31 @@ let idToStr = (obj) => {
   if (obj._id)
     obj._id = obj._id.toString();
   if (obj.posts)
-    obj.posts = obj.posts.map(x => x.toString())
+    obj.posts = obj.posts.map(x => x.toString());
+  if (obj.comments)
+    obj.comments = obj.comments.map(x => idToStr(x));
   return obj;
 }
+
+/**
+ * Reduces array according to validator function
+ * 
+ * False if error is encountered while applying validator
+ * @param {[any]} arr 
+ * @param {(any) => boolean} validatorFunc 
+ * @returns {boolean} 
+ */
+const validateArray = (arr, validatorFunc) => {
+  if (!arr || !Array.isArray(arr))
+    return false;
+
+  try {
+    return arr.reduce( (acc, x) => acc && validatorFunc(x), true );
+  } catch (e) {
+    console.error(`validateArray encountered error: ${JSON.stringify(e)}`);
+    return false;
+  }
+};
 
 module.exports = {
   validateStr,
@@ -157,5 +181,6 @@ module.exports = {
   checkId,
   checkPost,
   idToStr,
-  checkComment
+  checkComment,
+  validateArray
 }
