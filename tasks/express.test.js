@@ -21,7 +21,7 @@ describe("Location CRUD", () => {
 
   afterAll(async () => {
     await cleanUp(db, conn);
-  })
+  });
   
   let postId;
 
@@ -118,6 +118,71 @@ describe("Location CRUD", () => {
     }
   });
 });
+
+describe("Location search", () => {
+  let db, conn;
+
+  beforeAll(async() => {
+    ({ db, conn } = await connectToDb());  
+  });
+
+  afterAll(async () => {
+    await cleanUp(db, conn);
+  });
+
+  it("should successfully create two locations", async () => {
+    let loc1 = {
+      name: 'loc1',
+      description: 'first one',
+      tags: ['Building', 'Professor'],
+      location: [0,0]
+    };
+    try {
+      const response = await request(app)
+        .post('/locations/add')
+        .send(loc1);
+      expect(response.body.name).toEqual(loc1.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+
+    let loc2 = {
+      name: 'loc2',
+      description: 'second one',
+      tags: ['Eating Spot', 'Class'],
+      location: [1, 1]
+    };
+    try {
+      const response = await request(app)
+        .post('/locations/add')
+        .send(loc2);
+      expect(response.body.name).toEqual(loc2.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    };
+  });
+
+  it("should successfully find loc1 from a term search", async () => {
+    const body = {
+      term: 'loc1'
+    };
+
+    try {
+      const response = await request(app)
+        .post('/locations/search')
+        .send(body);
+      console.log(response.body);
+      expect(response.body[0].name).toEqual(body.term);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+
+})
+
 
 /**
  * Wrote this so I don't have to rewrite it in each test case.

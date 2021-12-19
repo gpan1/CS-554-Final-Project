@@ -252,6 +252,9 @@ const locSearch = async (args) => {
     await location.forEach((x) => {
       res.push(idToStr(x));
     });
+
+    console.log('search result: ', res);
+
     // await post.forEach(console.log);
     return res;
   } catch (e) {

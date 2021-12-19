@@ -62,9 +62,9 @@ router.post('/remove/:id', async (req, res) => {
   }
 });
 
-router.get('/search', async (req, res) => {
+router.post('/search', async (req, res) => {
   try {
-    let all = data.locSearch(req.body);
+    let all = await data.locSearch(req.body);
     return res.json(all);
   } catch (e) {
     return res.status.json({ error: e });
