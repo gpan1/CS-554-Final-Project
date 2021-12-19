@@ -1,4 +1,6 @@
-const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr, validateCoordinates, validateArray} = require('../util')
+const {checkPost, validateLocation, checkId, 
+  idToStr, checkComment, validateStr, 
+  validateCoordinates, validateArray, validateUrl} = require('../util')
 const { posts } = require('../config/mongoCollections');
 // const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
 const locations = require("./locations");
@@ -245,10 +247,10 @@ const update = async (id, args) => {
     updateObj.title = args.title;
   }
 
-  if (args.description) {
-    if (!validateStr(args.description)) 
-      throw TypeError(`post update invalid description: ${args.decription}`);
-    updateObj.description = args.description;
+  if (args.content) {
+    if (!validateStr(args.content)) 
+      throw TypeError(`post update invalid content: ${args.content}`);
+    updateObj.description = args.content;
   }
 
   if (args.location) {
@@ -273,6 +275,12 @@ const update = async (id, args) => {
     if (!validateArray(args.tags, validateStr))
       throw TypeError(`post update invalid tags: ${tags}`);
     updateObj.tags = args.tags;
+  }
+
+  if (args.imgUrl) {
+    if (!validateUrl(args.imageUrl))
+      throw TypeError(`post update invalid image url: ${args.imgUrl}`);
+    newObj.imgUrl = args.imgUrl;
   }
 
   const postCol = await posts();
@@ -351,7 +359,7 @@ module.exports = {
     postSearch,
     getPopularPosts,
     getPostsByTags,
-    post update: update,
+    update,
     remove
     // getPostsByLocation
     // getByPosterName

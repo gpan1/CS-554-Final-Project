@@ -186,5 +186,6 @@ module.exports = {
   checkPost,
   idToStr,
   checkComment,
-  validateArray
+  validateArray,
+  validateUrl
 }
