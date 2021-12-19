@@ -328,6 +328,7 @@ module.exports = {
     postSearch,
     getPopularPosts,
     getPostsByTags,
+    updatePost
     // getPostsByLocation
     // getByPosterName
 }
