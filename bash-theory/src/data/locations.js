@@ -24,25 +24,25 @@ const getAll = async () => {
 
 // tries to add a post ID to a location
 const addPost = async (locationId, postId) => {
-    // if (!validateLocation(location)) throw TypeError("Invalid location");
-    if (!postId) throw TypeError("No post id given");
-    //check if location exists in database
-    await getLocById(locationId);
-    const locs = await locations();
+  // if (!validateLocation(location)) throw TypeError("Invalid location");
+  if (!postId) throw TypeError("No post id given");
+  //check if location exists in database
+  await getLocById(locationId);
+  const locs = await locations();
 
-    try {
-        let _postId = checkId(postId);
-        let _locId = checkId(locationId);
-        const updateResult = locs.findOneAndUpdate(
-        // { location },
-        {_id: _locId},
-        { $push: { posts: _postId } },
-        { returnNewDocument: true });
-        if (!updateResult) throw Error("Failed to add post to location");
-        return updateResult;
-    } catch (e) {
-        throw Error("Failed to add post to location: " + e);
-    };
+  try {
+    let _postId = checkId(postId);
+    let _locId = checkId(locationId);
+    const updateResult = locs.findOneAndUpdate(
+      // { location },
+      { _id: _locId },
+      { $push: { posts: _postId } },
+      { returnNewDocument: true });
+    if (!updateResult) throw Error("Failed to add post to location");
+    return updateResult;
+  } catch (e) {
+    throw Error("Failed to add post to location: " + e);
+  };
 }
 
 const create = async (args) => {
@@ -51,9 +51,9 @@ const create = async (args) => {
     throw TypeError("Invalid location");
 
   let newObj = {
-      ...args,
-      posts: []
-    };
+    ...args,
+    posts: []
+  };
   const locCol = await locations();
   const { insertedId } = await locCol.insertOne(newObj);
   if (!insertedId) throw Error("Failed to create location");
@@ -66,21 +66,21 @@ const create = async (args) => {
 * @return {object}
 */
 const getLocById = async (id) => {
-    try {
-      let parsedId = checkId(id);
-      let locCol = await locations();
-      const loc = await locCol.findOne({ _id: parsedId });
-      if (loc === null) throw Error('No loc with that id');
+  try {
+    let parsedId = checkId(id);
+    let locCol = await locations();
+    const loc = await locCol.findOne({ _id: parsedId });
+    if (loc === null) throw Error('No loc with that id');
     //   await client.zincrbyAsync('popular', 1, id);
-      return idToStr(loc);
-    } catch (e) {
-      console.log(`Get location by id failed: ${e}`);
-      return { error: e };
-    }
+    return idToStr(loc);
+  } catch (e) {
+    console.log(`Get location by id failed: ${e}`);
+    return { error: e };
   }
+}
 
 const getByCoords = (coords) => {
-  if (!validateCoordinates(coords)) 
+  if (!validateCoordinates(coords))
     throw TypeError("Invalid coordinates; expected [longitude, latitude]");
   // todo ???
 
@@ -94,11 +94,11 @@ const getByCoords = (coords) => {
  * @param {object} args 
  * @returns {object} updated result
  */
-const update = (id, args) => {
+const update = async (id, args) => {
   let parsedId = checkId(id);
-  if (!args || JSON.stringify(args) === "{}") 
+  if (!args || JSON.stringify(args) === "{}")
     throw TypeError(`location update expected args, got nothing`);
-  
+
   const updateObj = {};
 
   if (args.name) {
@@ -107,7 +107,7 @@ const update = (id, args) => {
     updateObj.name = args.name;
   }
 
-  if (args.description) { 
+  if (args.description) {
     if (!validateStr(args.description))
       throw TypeError(`location update invalid description: ${args.description}`);
     updateObj.name = args.description;
@@ -122,15 +122,15 @@ const update = (id, args) => {
   if (args.location) {
     if (!validateCoordinates(args.location))
       throw TypeError(`location update invalid name: ${args.name}`);
-    updateObj.location = args.location;    
+    updateObj.location = args.location;
   }
 
   const locationCol = await locations();
   try {
     const result = await locationCol.findOneAndUpdate(
-      {_id: parsedId},
-      {$set: updateObj},
-      {returnOriginal: false});
+      { _id: parsedId },
+      { $set: updateObj },
+      { returnOriginal: false });
     if (!result.value)
       throw Error("Document not found");
     return idToStr(result.value);
@@ -145,14 +145,14 @@ const update = (id, args) => {
  * @returns {boolean} whether or not a location was deleted
  */
 const remove = async (id) => {
-  if (!validateStr(id)) 
+  if (!validateStr(id))
     throw TypeError('location remove invalid id');
 
   const parsedId = checkId(id);
   const locationCol = await locations();
 
   try {
-    const result = await locationCol.deleteOne({_id: parsedId});
+    const result = await locationCol.deleteOne({ _id: parsedId });
     if (result.deletedCount == 0)
       return false;
     return true;
