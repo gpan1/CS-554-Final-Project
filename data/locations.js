@@ -116,12 +116,6 @@ const getLocById = async (id) => {
   }
 };
 
-const getByCoords = (coords) => {
-  if (!validateCoordinates(coords))
-    throw TypeError("Invalid coordinates; expected [longitude, latitude]");
-  // todo ???
-};
-
 /**
  * Updates a location.
  *
