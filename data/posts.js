@@ -27,6 +27,21 @@ const getAll = async () => {
   return all.map((x) => idToStr(x));
 };
 /**
+ * Given a list of post ids, return a list of corresponding posts objects
+ * Can be used with the posts field of locations to get all posts under that location
+ * @param {Array} 
+ * @return {Array}
+ */
+const getByList = async (pidList) => {
+  let postList = [];
+  for (let pid of pidList){
+    console.log(pid);
+    let post = await getPostById(pid);
+    postList.push(post);
+  }
+  return postList;
+};
+/**
  * Does the same thing as getPostById but doesn't increment redis post count for popular posts
  * Can be used in update or delete functions to check if post id is valid
  * @return {object}
@@ -356,6 +371,7 @@ module.exports = {
   update,
   remove,
   postById,
+  getByList
   // getPostsByLocation
   // getByPosterName
 };

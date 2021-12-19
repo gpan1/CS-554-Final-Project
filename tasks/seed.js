@@ -58,6 +58,17 @@ async function main() {
         rating: 3.5
     });
     console.log(p3);
+    const p4 = await posts.create({
+        posterName: 'J',
+        title: 'Howe Bad',
+        content: 'Howe big bad',
+        date: new Date(),
+        location: [0,0],
+        locationId: l3._id,
+        tags: ['Building'],
+        rating: 1
+    });
+    console.log(p4);
     const c1 = await posts.addComment({
         postId: p1._id,
         posterName: 'Hill',
@@ -77,7 +88,10 @@ async function main() {
         sort: ['title',1]
     });
     console.log(s1);
-
+    const Howe = await locations.getLocById(l3._id);
+    console.log(Howe);
+    const HowePosts = await posts.getByList(Howe.posts);
+    console.log(HowePosts);
 
     await dbConnection.closeConnection();
     console.log("Done seeding database");
