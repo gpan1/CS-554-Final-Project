@@ -189,12 +189,22 @@ const addComment = async (args) => {
     
     return idToStr(commentObj);
 }
+
+/**
+ * Given a list of one or more tags, returns all posts that match the tags
+ * @param {[string]} tags 
+ */
+const getPostsByTags = async (tags) => {
+  
+}
+
 module.exports = {
     getAll,
     create,
     addComment,
     getPostById,
     postSearch,
-    getPopularPosts
+    getPopularPosts,
+    getPostsByTags
     // getByPosterName
 }
