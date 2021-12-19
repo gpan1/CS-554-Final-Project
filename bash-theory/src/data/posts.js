@@ -1,4 +1,6 @@
-const {checkPost, validateLocation, checkId, idToStr, checkComment, validateStr, validateCoordinates, validateArray} = require('../util')
+const {checkPost, validateLocation, checkId, 
+  idToStr, checkComment, validateStr, 
+  validateCoordinates, validateArray, validateUrl} = require('../util')
 const { posts } = require('../config/mongoCollections');
 // const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
 const locations = require("./locations");
@@ -229,55 +231,61 @@ const getPostsByTags = async (tags) => {
  * @param {object} args  
  * @returns {object} updated post
  */
-const updatePost = async (id, args) => {
+const update = async (id, args) => {
   if (!id) 
-    throw TypeError("updatePost: expected id");
+    throw TypeError("post update: expected id");
 
   const parsedId = checkId(id);
 
   if (JSON.stringify(args) === "{}") 
-    throw TypeError("updatePost: expected update args");
+    throw TypeError("post update: expected update args");
 
   const updateObj = {};
   if (args.title) {
     if (!validateStr(args.title))
-      throw TypeError(`updatePost invalid title: ${args.title}`);
+      throw TypeError(`post update invalid title: ${args.title}`);
     updateObj.title = args.title;
   }
 
-  if (args.description) {
-    if (!validateStr(args.description)) 
-      throw TypeError(`updatePost invalid description: ${args.decription}`);
-    updateObj.description = args.description;
+  if (args.content) {
+    if (!validateStr(args.content)) 
+      throw TypeError(`post update invalid content: ${args.content}`);
+    updateObj.content = args.content;
   }
 
   if (args.location) {
     if (!validateCoordinates(args.location))
-      throw TypeError(`updatePost invalid location: ${args.location}`);
+      throw TypeError(`post update invalid location: ${args.location}`);
     updateObj.location = args.location;
   }
 
   if (args.posterName) {
     if (!validateStr(args.posterName))
-      throw TypeError(`updatePost invalid posterName: ${args.posterName}`);
+      throw TypeError(`post update invalid posterName: ${args.posterName}`);
     updateObj.posterName = args.posterName;
   }
 
   if (args.rating) {
     if (!validateNum(args.rating)) 
-      throw TypeError(`updatePost invalid rating: ${args.rating}`);
+      throw TypeError(`post update invalid rating: ${args.rating}`);
     updateObj.rating = args.rating;
   }
 
   if (args.tags) {
     if (!validateArray(args.tags, validateStr))
-      throw TypeError(`updatePost invalid tags: ${tags}`);
+      throw TypeError(`post update invalid tags: ${tags}`);
     updateObj.tags = args.tags;
+  }
+
+  if (args.imgUrl) {
+    if (!validateUrl(args.imageUrl))
+      throw TypeError(`post update invalid image url: ${args.imgUrl}`);
+    newObj.imgUrl = args.imgUrl;
   }
 
   const postCol = await posts();
   try {
-    const result = postCol.findOneAndUpdate(
+    const result = await postCol.findOneAndUpdate(
       {_id: parsedId},
       {$set: updateObj},
       {returnOriginal: false}
@@ -288,7 +296,26 @@ const updatePost = async (id, args) => {
 
     return idToStr(result.value);
   } catch (e) {
-    console.log('updatePost encountered error: ', JSON.stringify(e));
+    console.log('post update encountered error: ', JSON.stringify(e));
+  }
+}
+
+/**
+ * Removes post with given ID, if found
+ * @param {string} postId 
+ * @returns {boolean} whether or not a post was deleted
+ */
+const remove = async (postId) => {
+  let parsedId = checkId(postId);
+  const postCol = await posts();
+  try {
+    let result = await postCol.deleteOne({_id: parsedId});
+    if (result.deletedCount == 0)
+      return false;
+    return true;
+  } catch (e) {
+    console.error(`remove encountered error: ${JSON.stringify(e)}`);
+    return false;
   }
 }
 
@@ -332,6 +359,8 @@ module.exports = {
     postSearch,
     getPopularPosts,
     getPostsByTags,
+    update,
+    remove
     // getPostsByLocation
     // getByPosterName
 }
