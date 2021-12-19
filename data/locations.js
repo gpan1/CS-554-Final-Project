@@ -112,7 +112,6 @@ const getLocById = async (id) => {
     //   await client.zincrbyAsync('popular', 1, id);
     return idToStr(loc);
   } catch (e) {
-    console.log(`Get location by id failed: ${e}`);
     return { error: e };
   }
 };

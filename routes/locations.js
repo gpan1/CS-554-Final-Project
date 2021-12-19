@@ -54,7 +54,7 @@ router.patch('/update/:id', async (req, res) => {
   }
 });
 
-router.get('/remove/:id', async (req, res) => {
+router.post('/remove/:id', async (req, res) => {
   try {
     let all = data.remove(req.params.id);
     return res.json(all);

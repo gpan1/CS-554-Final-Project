@@ -57,23 +57,38 @@ describe("Location CRUD", () => {
     }
   });
 
-
-
   it("should update the added location", async () => {
     let updateBody = {
       name: "Gavin's New Cave"
     };
     try {
-      console.log('Post id before update: ', postId);
       const response = await request(app)
         .patch('/locations/update/' + postId)
         .send(updateBody);
-      console.log("Body name: ", body.name);
-      console.log("Response body: ", response.body);
       expect(response.body.name).toEqual(updateBody.name);
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
+    }
+  });
+
+  it("should remove the added location", async () => {
+    try {
+      const response = await request(app)
+        .post('/locations/remove/' + postId);
+      expect(response.statusCode).toEqual(200);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+
+  it("should be unable to get the deleted location", async () => {
+    try {
+      const response = await request(app)
+        .get('/locations/byId/' + postId);
+    } catch (e) {
+      expect(e.response.statusCode).toEqual(404);
     }
   });
 });
