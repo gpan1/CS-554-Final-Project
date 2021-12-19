@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data/locations');
 
-router.get('/alllocations', async(req, res) => {
+router.get('/all', async(req, res) => {
     try{
         let all = await data.getAll();
         return res.json(all);
@@ -12,7 +12,7 @@ router.get('/alllocations', async(req, res) => {
     }
 });
 
-router.get('/addposts', async(req, res) => {
+router.get('/addPost', async(req, res) => {
     try{
         let all = await data.addPost(req.body.locationId, req.body.postId);
         return res.json(all);
@@ -21,7 +21,7 @@ router.get('/addposts', async(req, res) => {
     }
 });
 
-router.get('/lCreate', async(req, res) => {
+router.get('/add', async(req, res) => {
     try{
         let all = await data.create(req.body);
         return res.json(all);
@@ -30,7 +30,7 @@ router.get('/lCreate', async(req, res) => {
     }
 });
 
-router.get('/getLocById/:id', async(req, res) => {
+router.get('/byId/:id', async(req, res) => {
     try{
         let all = await data.getLocById(req.params.id);
         return res.json(all);
@@ -39,7 +39,7 @@ router.get('/getLocById/:id', async(req, res) => {
     }
 });
 
-router.get('/locUpdate/:id', async(req, res) => {
+router.get('/update/:id', async(req, res) => {
     try{
         let all = await data.update(req.params.id, req.body);
         return res.json(all);
@@ -48,7 +48,7 @@ router.get('/locUpdate/:id', async(req, res) => {
     }
 });
 
-router.get('/locRemove/:id', async(req, res) => {
+router.get('/remove/:id', async(req, res) => {
     try{
         let all = data.remove(req.params.id);
         return res.json(all);
@@ -57,7 +57,7 @@ router.get('/locRemove/:id', async(req, res) => {
     }
 });
 
-router.get('/locSearch', async(req, res) => {
+router.get('/search', async(req, res) => {
     try{
         let all = data.locSearch(req.body);
         return res.json(all);
