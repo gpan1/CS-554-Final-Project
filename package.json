@@ -32,7 +32,7 @@
     "@shelf/jest-mongodb": "^2.1.1",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "jest": "^27.4.5",
+    "jest": "26.6.0",
     "superagent": "^6.1.0",
     "supertest": "^6.1.6"
   }
