@@ -283,8 +283,9 @@ const updatePost = async (id, args) => {
       throw Error('Document not found');
 
     return idToStr(result.value);
+  } catch (e) {
+    console.log('updatePost encountered error: ', JSON.stringify(e));
   }
-
 }
 
 // /**
