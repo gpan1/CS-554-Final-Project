@@ -45,7 +45,6 @@ router.get('/byId/:id', async (req, res) => {
 });
 
 router.patch('/update/:id', async (req, res) => {
-  console.log("In patch route: ", req.params.id);
   try {
     let all = await data.update(req.params.id, req.body);
     return res.json(all);
