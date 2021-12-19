@@ -43,8 +43,6 @@ const updateRating = async (id) => {
     } catch(e){
 
     }
-    acc = acc / cnt;
-  } catch (e) {}
 };
 // tries to add a post ID to a location
 const addPost = async (locationId, postId) => {
