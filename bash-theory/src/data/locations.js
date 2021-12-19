@@ -97,31 +97,31 @@ const getByCoords = (coords) => {
 const update = (id, args) => {
   let parsedId = checkId(id);
   if (!args || JSON.stringify(args) === "{}") 
-    throw TypeError(`updateLocation expected args, got nothing`);
+    throw TypeError(`location update expected args, got nothing`);
   
   const updateObj = {};
 
   if (args.name) {
     if (!validateStr(args.name))
-      throw TypeError(`updateLocation invalid name: ${args.name}`);
+      throw TypeError(`location update invalid name: ${args.name}`);
     updateObj.name = args.name;
   }
 
   if (args.description) { 
     if (!validateStr(args.description))
-      throw TypeError(`updateLocation invalid description: ${args.description}`);
+      throw TypeError(`location update invalid description: ${args.description}`);
     updateObj.name = args.description;
   }
 
   if (args.tags) {
     if (!validateArray(args.tags, validateStr))
-      throw TypeError(`updateLocation invalid name: ${args.name}`);
+      throw TypeError(`location update invalid name: ${args.name}`);
     updateObj.tags = args.tags;
   }
 
   if (args.location) {
     if (!validateCoordinates(args.location))
-      throw TypeError(`updateLocation invalid name: ${args.name}`);
+      throw TypeError(`location update invalid name: ${args.name}`);
     updateObj.location = args.location;    
   }
 
@@ -135,7 +135,30 @@ const update = (id, args) => {
       throw Error("Document not found");
     return idToStr(result.value);
   } catch (e) {
-    console.log('updateLocation encountered error: ', JSON.stringify(e));
+    console.log('location update encountered error: ', JSON.stringify(e));
+  }
+}
+
+/**
+ * Removes location with given ID, if found
+ * @param {string} location id 
+ * @returns {boolean} whether or not a location was deleted
+ */
+const remove = async (id) => {
+  if (!validateStr(id)) 
+    throw TypeError('location remove invalid id');
+
+  const parsedId = checkId(id);
+  const locationCol = await locations();
+
+  try {
+    const result = await locationCol.deleteOne({_id: parsedId});
+    if (result.deletedCount == 0)
+      return false;
+    return true;
+  } catch (e) {
+    console.error(`location remove encountered error: ${JSON.stringify(e)}`);
+    return false;
   }
 }
 
@@ -144,6 +167,7 @@ module.exports = {
   create,
   addPost,
   update,
+  remove,
   // getByCoords,
   getLocById
   // getById,
