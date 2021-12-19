@@ -6,7 +6,7 @@ const endpoint = "http://localhost:4000";
 
 // for dropping DB
 const { MongoClient, Collection } = require('mongodb');
-const settings = require("./config/settings");
+const settings = require("../config/settings");
 const mongoConfig = settings.mongoConfig;
 
 describe("insert", () => {
@@ -24,7 +24,7 @@ describe("insert", () => {
   };
 
   beforeAll(async() => {
-    ({ db, conn }) = await connectToDb();
+    ({ db, conn } = await connectToDb());
   });
 
   afterAll(async () => {
@@ -41,6 +41,10 @@ describe("insert", () => {
   });
 });
 
+/**
+ * Wrote this so I don't have to rewrite it in each test case.
+ * @returns {object} {db, conn}
+ */
 const connectToDb = async () => {
   let connection = await MongoClient.connect(mongoConfig.serverUrl, 
     {useNewUrlParser: true,
@@ -51,6 +55,11 @@ const connectToDb = async () => {
   };
 };
 
+/**
+ * Drops database and closes the connection
+ * @param {object} db 
+ * @param {object} conn 
+ */
 const cleanUp = async (db, conn) => {
   await db.dropDatabase();
   await conn.close();
