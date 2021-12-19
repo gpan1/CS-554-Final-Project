@@ -398,7 +398,7 @@ describe("Post search", () => {
       expect(e).toMatch("nothing because this shouldnt fail");
     }
   });
-  it("should successfully create two locations", async () => {
+  it("should successfully create two posts", async () => {
     let post1 = {
       posterName: "Big Dum Dum",
       title: "What a big cave",
@@ -474,6 +474,111 @@ describe("Post search", () => {
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
+    }
+  });
+});
+
+describe("Post popularity", () => {
+  let db, conn;
+
+  beforeAll(async() => {
+    ({ db, conn } = await connectToDb());  
+  });
+
+  afterAll(async () => {
+    await cleanUp(db, conn);
+  });
+  let postId1;
+  let postId2;
+  let locationId;
+  let location;
+  it("should add a location", async () => {
+    let body = {
+      name: "Gavin's Cave",
+      location: [69, 69],
+      description: "Dark and moist",
+      tags: ['Dungeon']
+    };
+    try {
+      const response = await request(app)
+        .post('/locations/add')
+        .send(body);
+      locationId = response.body._id;
+      location = response.body.location;
+      expect(response.body.name).toEqual(body.name);
+    } catch (e) {
+      expect(e).toMatch("nothing because this shouldnt fail");
+    }
+  });
+  it("should successfully create two posts", async () => {
+    let post1 = {
+      posterName: "Big Dum Dum",
+      title: "What a big cave",
+      locationId: locationId,
+      location: location,
+      content: "Its so cavernous in here, I want to set up a fire.",
+      date: new Date(),
+      rating: 4.5,
+      tags: ['Eating Spot']
+    };
+    try {
+      const response = await request(app)
+        .post('/posts/add')
+        .send(post1);
+      postId1 = response.body._id;
+      expect(response.body.name).toEqual(post1.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+
+    let post2 = {
+      posterName: "Small Dum Dum",
+      title: "I don't like this cave, it smells funny.",
+      locationId: locationId,
+      location: location,
+      content: "The smell is overwhelming, I feel like I will faint.",
+      date: new Date(),
+      rating: 1.5,
+      tags: ['Dungeon']
+    };
+    try {
+      const response = await request(app)
+        .post('/posts/add')
+        .send(post2);
+      postId2 = response.body._id;
+      expect(response.body.name).toEqual(post2.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+  it("should add comment to post", async () => {
+    let body = {
+      postId: postId1,
+      posterName: "Dimple",
+      content: "No don't set it on fire!",
+      date: new Date()
+    };
+    try {
+      const response = await request(app)
+        .post('/posts/addComment')
+        .send(body);
+      console.log(response.body);
+      expect(response.body.posterName).toEqual(body.posterName);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+  it("should find popular post", async () => {
+    try {
+      const response = await request(app)
+        .get('/posts/popular');
+      console.log(response.body);
+      expect(response.body[0]).toEqual(postId1);
+    } catch (e) {
+      expect(e).toMatch("nothing because this shouldnt fail");
     }
   });
 });
