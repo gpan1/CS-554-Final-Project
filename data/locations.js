@@ -165,11 +165,16 @@ const update = async (id, args) => {
       { _id: parsedId },
       { $set: updateObj }
     );
-    if (result.modifiedCount === 0) throw Error("Document not found");
+
     const updated = await locationCol.findOne({ _id: parsedId });
+
+    // if (result.modifiedCount === 0) 
+    //   throw Error("Document not found");
+
     return idToStr(updated);
   } catch (e) {
-    console.log("location update encountered error: ", JSON.stringify(e));
+    console.log('Location update error:');
+    console.log(e)
   }
 };
 
