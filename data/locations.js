@@ -253,6 +253,7 @@ module.exports = {
   remove,
   // getByCoords,
   getLocById,
+  locSearch
   // getById,
   // getByPosterName
 };

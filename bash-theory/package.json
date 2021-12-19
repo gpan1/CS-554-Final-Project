@@ -9,7 +9,6 @@
     "@testing-library/user-event": "^12.8.3",
     "bluebird": "^3.7.2",
     "bootstrap": "^5.1.3",
-    "mongodb": "^4.2.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.3",
     "react-dom": "^17.0.2",
@@ -21,7 +20,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest --forceExit",
     "eject": "react-scripts eject",
     "seed": "node ./src/tasks/seed.js"
   },
@@ -42,8 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@shelf/jest-mongodb": "^2.1.1"
   }
 }
