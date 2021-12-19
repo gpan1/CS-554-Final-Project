@@ -15,17 +15,8 @@ describe("Location CRUD", () => {
   let db;
   let conn;
 
-  let body;
-
   beforeAll(async() => {
-    ({ db, conn } = await connectToDb());
-    body = {
-      name: "Gavin's Cave",
-      location: [69, 69],
-      description: "Dark and moist",
-      tags: ['Dungeon']
-    };
-  
+    ({ db, conn } = await connectToDb());  
   });
 
   afterAll(async () => {
@@ -35,6 +26,12 @@ describe("Location CRUD", () => {
   let postId;
 
   it("should add a location", async () => {
+    let body = {
+      name: "Gavin's Cave",
+      location: [69, 69],
+      description: "Dark and moist",
+      tags: ['Dungeon']
+    };
     try {
       const response = await request(app)
         .post('/locations/add')
@@ -46,11 +43,29 @@ describe("Location CRUD", () => {
     }
   });
 
+  it("should add a second location", async () => {
+    let body = {
+      name: "elo hell",
+      location: [-69, -69],
+      description: "totally real",
+      tags: ['for sure a real place']
+    };
+    try {
+      const response = await request(app)
+        .post('/locations/add')
+        .send(body);
+      expect(response.body.name).toEqual(body.name);
+    } catch (e) {
+      console.log(e);
+      expect(e).toBeFalsy();
+    }
+  });
+
   it("should retrieve added location by id", async () => {
     try {
       const response = await request(app)
         .get('/locations/byId/' + postId);
-      expect(response.body.name).toEqual(body.name);
+      expect(response.body._id).toEqual(postId);
     } catch (e) {
       console.log(e);
       expect(e).toBeFalsy();
