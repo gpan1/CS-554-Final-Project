@@ -62,6 +62,7 @@ https://www.geeksforgeeks.org/how-to-check-a-date-is-valid-or-not-using-javascri
 */
 let validateDate = (date) => {
   if (!date
+    || !date.getTime
     // invalid dates produce NaN when getTime() is called
     // NaN is never equal to itself
     || (date.getTime() !== date.getTime()))
