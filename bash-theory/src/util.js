@@ -9,7 +9,22 @@ const validateStr = (str) => str && typeof str === 'string'
 const validateNum = (num) => num && typeof num === 'number'
     && num >= 0 && num <= 5;
 
+// https://stackoverflow.com/a/3809435
+const urlRe = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/;
 
+/**
+ * Given a string, attempts to match a url reg-ex to it
+ * Returns false if input is valid or no match is found
+ * @param {string} url 
+ * @returns {boolean | string}
+ */
+const validateUrl = url => {
+  if (!url || !(typeof url === 'string'))
+    return false;
+  const urlMatch = url.match(urlRe);
+  if (!urlMatch) return false;
+  return urlMatch;
+}
 
 /** Confirms location object is valid before creating
  * @param {object} -- {name: String, description: String, location: [Number, Number]}
@@ -70,6 +85,7 @@ let checkComment = (args) => {
     };
     return newObj;
 }
+
 let checkPost = (args) => {
   if (!args)
     throw TypeError("No args supplied");
@@ -81,7 +97,7 @@ let checkPost = (args) => {
     || !validateDate(args.date)
     || !validateCoordinates(args.location)
     // optional fields, checking only if passed
-    || (args.imgUrl && !validateStr(args.imgUrl))
+    || (args.imgUrl && !validateUrl(args.imgUrl))
     || (args.tags && args.tags.reduce((x, acc) =>
       (acc && validateStr(x)), true))
   )
