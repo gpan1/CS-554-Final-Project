@@ -1,10 +1,8 @@
-const axios = require('axios');
 const express = require('express');
 const router = express.Router();
 const data = require('../data/posts');
 
-
-router.get('/allPosts', async(req, res) => {
+router.get('/all', async(req, res) => {
     try{
         let all = await data.getAll();
         return res.json(all);
@@ -13,7 +11,7 @@ router.get('/allPosts', async(req, res) => {
     }
 });
 
-router.get('/postById/:id', async(req, res) => {
+router.get('/byId/:id', async(req, res) => {
     try{
         let all = await data.postById(req.params.id);
         return res.json(all);
@@ -22,16 +20,7 @@ router.get('/postById/:id', async(req, res) => {
     }
 });
 
-router.get('/getPostById/:id', async(req, res) => {
-    try{
-        let all = await data.getPostById(req.params.id);
-        return res.json(all);
-    } catch(e) {
-        return res.status.json({ error: e});
-    }
-});
-
-router.get('/getPopularPosts', async(req, res) => {
+router.get('/popular', async(req, res) => {
     try{
         let all = await data.getPopularPosts();
         return res.json(all);
@@ -40,7 +29,7 @@ router.get('/getPopularPosts', async(req, res) => {
     }
 });
 
-router.get('/pCreate', async(req, res) => {
+router.post('/add', async(req, res) => {
     try{
         let all = await data.create(req.body);
         return res.json(all);
@@ -49,7 +38,7 @@ router.get('/pCreate', async(req, res) => {
     }
 });
 
-router.get('/addComment', async(req, res) => {
+router.post('/addComment', async(req, res) => {
     try{
         let all = await data.addComment(req.body);
         return res.json(all);
@@ -58,25 +47,17 @@ router.get('/addComment', async(req, res) => {
     }
 });
 
-router.get('/getPostByTags', async(req, res) => {
-    try{
-        let all = await data.addComment(req.body);
-        return res.json(all);
-    } catch(e) {
-        return res.status.json({ error: e});
-    }
-});
+// TODO: figure out how to correctly pass array data here
+// router.post('/getPostsByTags', async(req, res) => {
+//     try{
+//         let all = await data.addComment(req.body);
+//         return res.json(all);
+//     } catch(e) {
+//         return res.status.json({ error: e});
+//     }
+// });
 
-router.get('/getLocById/:id', async(req, res) => {
-    try{
-        let all = await data.getLocById(req.params.id);
-        return res.json(all);
-    } catch(e) {
-        return res.status.json({ error: e});
-    }
-});
-
-router.get('/postUpdate/:id', async(req, res) => {
+router.patch('/update/:id', async(req, res) => {
     try{
         let all = await data.update(req.params.id, req.body);
         return res.json(all);
@@ -85,7 +66,7 @@ router.get('/postUpdate/:id', async(req, res) => {
     }
 });
 
-router.get('/postRemove/:id', async(req, res) => {
+router.post('/remove/:id', async(req, res) => {
     try{
         let all = data.remove(req.params.id);
         return res.json(all);
@@ -94,7 +75,7 @@ router.get('/postRemove/:id', async(req, res) => {
     }
 });
 
-router.get('/postSearch', async(req, res) => {
+router.get('/search', async(req, res) => {
     try{
         let all = data.postSearch(req.body);
         return res.json(all);
