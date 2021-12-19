@@ -192,10 +192,33 @@ const addComment = async (args) => {
 
 /**
  * Given a list of one or more tags, returns all posts that match the tags
- * @param {[string]} tags 
+ * Note: this attempts to match ALL given tags; if a post doesn't have ALL
+ * the supplied tags, it will not be included in the result
+ * @param {[string]} tags
+ * @returns All posts matching the tags
+ * @throws TypeError on invalid input 
  */
 const getPostsByTags = async (tags) => {
-  
+  if (!Array.isArray(tags)) 
+    throw TypeError(`Expected array, got ${tags ? tags : 'nothing'}`);
+
+  // validate every tag
+  if (!(tags.reduce(
+    (acc, x) => acc && validateStr(x),
+    true)))
+    throw TypeError("Not all tags passed string check");
+
+  const postCol = await posts();
+  try {
+    const matches = await postCol.find({
+      tags: {
+        $all: tags
+      }
+    }).toArray();
+    return matches;  
+  } catch (e) {
+    console.log('getPostsByTags encountered error: ', JSON.stringify(e));
+  };
 }
 
 module.exports = {
