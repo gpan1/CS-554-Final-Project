@@ -1,6 +1,7 @@
 // Code skeleton from react-google-maps documentation.
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
@@ -28,15 +29,13 @@ function Map() {
     data: { name: "", description: "" },
   });
 
+  // History for navigation using modal.
+  let navigate = useNavigate();
+
   // Handler functions for the modal.
   const handleClose = () =>
     setShow({ show: false, data: { name: "", description: "" } });
   const handleShow = (props) => setShow({ show: true, data: props });
-
-  const travel = () => {
-    //TODO: Implement a method of redirecting the user to the item's page.
-    console.log("travelling");
-  };
 
   // Generate a modal on click of a marker.
   // This modal will display information on the corresponding item and give the option to navigate to the item page.
@@ -50,7 +49,10 @@ function Map() {
         <Button variant="secondary" onClick={handleClose}>
           Close
         </Button>
-        <Button variant="primary" onClick={travel}>
+        <Button
+          variant="primary"
+          onClick={() => navigate(`/item/${show.data._id}`)}
+        >
           Travel
         </Button>
       </Modal.Footer>
@@ -61,16 +63,8 @@ function Map() {
     // On Load
     let fetchData = async () => {
       try {
-        let { data } = await axios.get("localhost:4000/all");
-        console.log(data);
-        let result = [
-          {
-            name: "Karma Kafe",
-            description: "Good food",
-            location: [-74.02905, 40.74237],
-          },
-        ];
-        let res = result.map((marker) => {
+        let { data } = await axios.get("http://localhost:4000/locations/all");
+        let res = data.map((marker) => {
           marker.location = {
             lat: marker.location[1],
             lng: marker.location[0],
@@ -111,7 +105,6 @@ function Map() {
                 <Marker
                   position={data.location}
                   onClick={() => handleShow(data)}
-                  onDblClick={() => travel()}
                 ></Marker>
               );
             })}
