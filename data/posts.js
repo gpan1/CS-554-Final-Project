@@ -8,6 +8,7 @@ const {
   validateCoordinates,
   validateArray,
   validateUrl,
+  validateNum
 } = require("../util");
 const { posts } = require("../config/mongoCollections");
 // const {create: createLocation, addId: addPostIdToLocation} = require('./locations');
@@ -157,22 +158,6 @@ const create = async (args) => {
   if (!insertedId) throw Error("Failed to create post");
   const res = idToStr(newObj);
   await locations.addPost(res.locationId, res._id);
-  // do not attempt adding location when a post is made for a nonexisting one
-
-  // // if location hasn't been added, attempt adding
-  // if (args.location && validateLocation(args.location)) {
-  //     // if location already exists, inserting it will throw which is fine
-  //     try {
-  //         const loc = await createLocation({...args.location}, insertedId.toString());
-  //         console.info(`Added location with id ${loc._id}`);
-  //     // if it already exists, we need to add this post's id to the locations'
-  //     // list of posts
-  //     } catch (e) {
-  //         console.log(e);
-  //         const updatedLoc = await addPostIdToLocation(newObj.location, newObj._id);
-  //         console.debug(`Added post ${newObj._id} to location`);
-  //     }
-  // }
   await client.zaddAsync("popular", 1, newObj._id);
   return res;
 };

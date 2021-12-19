@@ -7,6 +7,7 @@ const {
   validateArray,
 } = require("../util");
 const { locations } = require("../config/mongoCollections");
+const { posts } = require("../config/mongoCollections");
 /**
  * Location schema:
  * coords!: [Number, Number]    \\ (longitude, latitude)
@@ -27,20 +28,31 @@ const getAll = async () => {
   let all = await locCol.find({}).toArray();
   return all;
 };
-// const updateRating = async (id) => {
-//   try {
-//     const loc = await getLocById(id);
-//     const postList = loc.posts;
-//     let acc = 0;
-//     let cnt = 0;
-//     for (let pid of postList) {
-//       const post = await posts.postById(pid.toString());
-//       acc += post.rating;
-//       cnt++;
-//     }
-//     acc = acc / cnt;
-//   } catch (e) {}
-// };
+const updateRating = async (id) => {
+  try {
+    const loc = await getLocById(id);
+    const postList = loc.posts;
+    let acc = 0;
+    let cnt = 0;
+    const postCol = await posts();
+    for (let pid of postList) {
+      const post = await postCol.findOne({ _id: checkId(pid) }); 
+      acc += post.rating;
+      cnt++;
+    }
+    acc = acc / cnt;
+    const locCol = await locations();
+    const parsedId = checkId(id);
+    const result = await locCol.updateOne(
+      { _id: parsedId },
+      { $set: {avgRating:acc} }
+    );
+    if (result.modifiedCount === 0 && result.matchedCount === 0) throw Error("Document not found");
+    return result;
+  } catch (e) {
+    throw Error("Failed to update location average rating: " + e);
+  }
+};
 // tries to add a post ID to a location
 const addPost = async (locationId, postId) => {
   // if (!validateLocation(location)) throw TypeError("Invalid location");
@@ -59,6 +71,7 @@ const addPost = async (locationId, postId) => {
       { returnNewDocument: true }
     );
     if (!updateResult) throw Error("Failed to add post to location");
+    updateRating(locationId);
     return updateResult;
   } catch (e) {
     throw Error("Failed to add post to location: " + e);
@@ -253,7 +266,8 @@ module.exports = {
   remove,
   // getByCoords,
   getLocById,
-  locSearch
+  locSearch,
+  updateRating
   // getById,
   // getByPosterName
 };
