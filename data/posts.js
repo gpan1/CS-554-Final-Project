@@ -27,6 +27,21 @@ const getAll = async () => {
   return all.map((x) => idToStr(x));
 };
 /**
+ * Given a list of post ids, return a list of corresponding posts objects
+ * Can be used with the posts field of locations to get all posts under that location
+ * @param {Array} 
+ * @return {Array}
+ */
+const getByList = async (pidList) => {
+  let postList = [];
+  for (let pid of pidList){
+    console.log(pid);
+    let post = await getPostById(pid);
+    postList.push(post);
+  }
+  return postList;
+};
+/**
  * Does the same thing as getPostById but doesn't increment redis post count for popular posts
  * Can be used in update or delete functions to check if post id is valid
  * @return {object}
@@ -94,11 +109,12 @@ const postSearch = async (args) => {
   let res = [];
   let tags = ["Building", "Class", "Eating Spot", "Professor"];
   let sorting = { title: 1 };
+  const validFields = ['title', 'posterName', 'rating', 'date'];
   try {
-    validateStr(args.term);
+    if (!validateStr(args.term)) throw TypeError(`Invalid term: ${args.term}`);
     if (args.tags) {
       for (let t of args.tags) {
-        validateStr(t);
+        if(!validateStr(t)) throw TypeError(`Invalid tag: ${t}`);
       }
       tags = args.tags;
     }
@@ -107,7 +123,10 @@ const postSearch = async (args) => {
     if (args.sort) {
       if (!Array.isArray(args.sort))
         throw TypeError(`Invalid sort: ${args.sort}`);
-      validateStr(args.sort[0]);
+        if (!validateStr(args.sort[0]))
+        throw TypeError(`Invalid sort field: ${args.sort[0]}`);
+      if (!validFields.includes(args.sort[0])) 
+        throw TypeError(`Invalid sort field: ${args.sort[0]}`);
       let order = 1;
       if (args.sort.length > 1) {
         // if the sort option is invalid, just use default of 1
@@ -356,6 +375,7 @@ module.exports = {
   update,
   remove,
   postById,
+  getByList
   // getPostsByLocation
   // getByPosterName
 };
