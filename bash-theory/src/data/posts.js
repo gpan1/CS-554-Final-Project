@@ -250,7 +250,7 @@ const update = async (id, args) => {
   if (args.content) {
     if (!validateStr(args.content)) 
       throw TypeError(`post update invalid content: ${args.content}`);
-    updateObj.description = args.content;
+    updateObj.content = args.content;
   }
 
   if (args.location) {
