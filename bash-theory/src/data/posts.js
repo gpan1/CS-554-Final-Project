@@ -20,15 +20,15 @@ const getAll = async () => {
 /**
 * Does the same thing as getPostById but doesn't increment redis post count for popular posts
 * Can be used in update or delete functions to check if post id is valid
-* @return {boolean} true if post exists, false otherwise
+* @return {object}
 */
-const checkPostId = async (id) => {
+const postById = async (id) => {
     try{
         let parsedId = checkId(id);
         let postCol = await posts();
         const post = await postCol.findOne({ _id: parsedId });
-        if (post === null) return false;
-        return true;
+        if (post === null) throw Error('No post with that id');
+        return idToStr(post);
     } catch(e) {
         console.log(`Get post by id failed: ${e}`);
         return {error: e};
@@ -115,10 +115,10 @@ const postSearch = async (args) => {
         };
         const options = {
             // sort returned documents in ascending order by title (A->Z)
-            sort: { 'title': 1 }
+            sort: sorting
             // projection: { _id: 0, title: 1, imdb: 1 },
           };
-        const post = await postCol.find(query);
+        const post = await postCol.find(query,options);
         if (post === null) throw Error('No post match');
         await post.forEach((x)=>{
             res.push(idToStr(x));
@@ -360,7 +360,8 @@ module.exports = {
     getPopularPosts,
     getPostsByTags,
     update,
-    remove
+    remove,
+    postById
     // getPostsByLocation
     // getByPosterName
 }

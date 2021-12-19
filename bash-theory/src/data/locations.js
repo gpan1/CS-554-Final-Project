@@ -1,7 +1,7 @@
 const { validateLocation, checkId, validateCoordinates,
    validateStr, idToStr, validateArray } = require('../util')
 const { locations } = require('../config/mongoCollections');
-
+const posts = require("../data/posts");
 /**
  * Location schema:
  * coords!: [Number, Number]    \\ (longitude, latitude)
@@ -22,7 +22,17 @@ const getAll = async () => {
   let all = await locCol.find({}).toArray();
   return all;
 }
+const updateRating = async (id) => {
+    try{
+        const loc = await getLocById(id);
+        const posts = loc.posts;
+        for(let post of posts){
+            
+        }
+    } catch(e){
 
+    }
+}
 // tries to add a post ID to a location
 const addPost = async (locationId, postId) => {
   // if (!validateLocation(location)) throw TypeError("Invalid location");
@@ -55,6 +65,7 @@ const create = async (args) => {
         name: args.name,
         location: args.location,
         description: args.description,
+        avgRating: 'N/A',
         tags: [],
         posts: []
         };
@@ -67,8 +78,7 @@ const create = async (args) => {
     return idToStr(newObj);
 }
 /**
-* Checks if the post id is valid and returns with the post if it exists
-* Also increments the redis post count for popular posts as someone has visited the post
+* Checks if the location id is valid and returns with the location object if it exists
 * @param {string}
 * @return {object}
 */
