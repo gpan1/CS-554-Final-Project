@@ -79,7 +79,8 @@ const addPost = async (locationId, postId) => {
 };
 
 const create = async (args) => {
-  if (!args || !validateLocation(args)) throw TypeError("Invalid location");
+  if (!args || !validateLocation(args))
+    throw TypeError("Invalid location");
 
   let newObj = {
     name: args.name,
@@ -143,7 +144,7 @@ const update = async (id, args) => {
       throw TypeError(
         `location update invalid description: ${args.description}`
       );
-    updateObj.name = args.description;
+    updateObj.description = args.description;
   }
 
   if (args.tags) {
