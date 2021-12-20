@@ -287,3 +287,7 @@ button {
     text-align: center;
     font-size: 30px;
 }
+button {
+    border: none;
+    background-color: transparent;
+}

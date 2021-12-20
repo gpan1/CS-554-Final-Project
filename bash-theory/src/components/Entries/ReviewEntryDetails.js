@@ -18,12 +18,13 @@ function ReviewEntryDetails(props){
     }, [props.data]);
 
     return (
+        <>
         <div className="reviewEntry">
             <Row>
                 <Col className="reviewRating">
                     <h1>{data.rating}/5</h1>
                 </Col>
-                <Col xs={10}>
+                <Col xs={9}>
                     <Row className="reviewHeader">
                         <h1>{data.posterName} - {data.title}</h1>
                         <h2>Reviewed on: {new Date(data.date).toDateString()}</h2>
@@ -43,6 +44,8 @@ function ReviewEntryDetails(props){
                 </Col>
             </Row>
         </div>
+        <br/>
+        </>
     )
 }
 
