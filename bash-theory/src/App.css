@@ -242,3 +242,13 @@ button {
     text-transform: uppercase;
     font-size: 30px;
 }
+
+.btn-errorLink {
+    color: black !important;
+    background-color: white;
+    font-size: 30px !important;
+}
+
+.btn-errorLink:hover{
+    background-color: #ca8a8a;
+}

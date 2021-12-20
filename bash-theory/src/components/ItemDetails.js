@@ -26,7 +26,7 @@ function ItemDetails(){
         <div className="contentDiv">
             <Row>
                 <Col>
-                    <img src={noImage} alt="Test No AvailableImage" />
+                    <img src={data.imgUrl ? data.imgUrl : noImage} alt="Test No AvailableImage" />
                     <div className="contentDetails">
                         <h1>{data.name}</h1>
                         <h2>{data.tags}</h2>
@@ -36,7 +36,7 @@ function ItemDetails(){
                     </div>
                 </Col>
                 <Col xs={8}>
-                    {data.posts ? data.posts.map((item, i) => <ReviewEntryDetails key={i} data={item} />) : "No Reviews"}
+                    {(data.posts && data.posts.length > 0) ? data.posts.map((item, i) => <ReviewEntryDetails key={i} data={item} />) : <p className="noComment">No Reviews</p>}
                 </Col>
             </Row>
         </div>
