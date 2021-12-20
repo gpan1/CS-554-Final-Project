@@ -93,4 +93,17 @@ router.post("/search", async (req, res) => {
   }
 });
 
+router.get('/popular', async (req, res) => {
+  try {
+    let all = await data.getPopularLocations();
+    return res.json(all);
+  } catch (e) {
+    return res
+      .status(e instanceof TypeError ? 400 
+        : e instanceof Error ? 404
+        : 500)
+      .json({error: e});
+  }
+});
+
 module.exports = router;
