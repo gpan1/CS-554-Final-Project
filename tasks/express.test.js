@@ -39,6 +39,7 @@ describe("Location CRUD", () => {
     };
     try {
       const response = await request(app).post("/locations/add").send(body);
+      console.log(response.body);
       postId = response.body._id;
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
@@ -65,6 +66,7 @@ describe("Location CRUD", () => {
   it("should retrieve both the added locations", async () => {
     try {
       const response = await request(app).get("/locations/all");
+      console.log(response.body);
       expect(response.body.length).toEqual(2);
     } catch (e) {
       console.log(e);
@@ -176,6 +178,7 @@ describe("Location search", () => {
 
     try {
       const response = await request(app).post("/locations/search").send(body);
+      // console.log(response.body);
       expect(response.body[0].name).toEqual(body.term);
     } catch (e) {
       console.log(e);
@@ -191,6 +194,7 @@ describe("Location search", () => {
 
     try {
       const response = await request(app).post("/locations/search").send(body);
+      // console.log(response.body);
       expect(response.body[0].name).toEqual("loc2");
     } catch (e) {
       console.log(e);
@@ -364,7 +368,7 @@ describe("Post CRUD", () => {
     try {
       const response = await request(app).post("/posts/add").send(body);
       postId1 = response.body._id;
-
+      console.log(response.body);
       expect(response.body.name).toEqual(body.name);
     } catch (e) {
       expect(e).toMatch("nothing because this shouldnt fail");
@@ -630,7 +634,7 @@ describe("Post popularity", () => {
   it("should find popular post", async () => {
     try {
       const response = await request(app).get("/posts/popular");
-
+      console.log(response.body);
       expect(response.body[0]).toEqual(postId1);
     } catch (e) {
       expect(e).toMatch("nothing because this shouldnt fail");

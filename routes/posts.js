@@ -27,7 +27,7 @@ router.get("/byId/:id", async (req, res) => {
 
 router.get("/popular", async (req, res) => {
   try {
-    let all = data.getPopularPosts();
+    let all = await data.getPopularPosts();
     return res.json(all);
   } catch (e) {
     return res
@@ -40,6 +40,7 @@ router.post("/add", async (req, res) => {
   try {
     let x = 
     {
+        ...req.body,
       posterName: xss(req.body.posterName),
       title: xss(req.body.title),
       locationId: xss(req.body.locationId)
@@ -123,7 +124,7 @@ router.post("/remove/:id", async (req, res) => {
 router.post("/search", async (req, res) => {
   try {
     let x = (req.body);
-    let all = data.postSearch(x);
+    let all = await data.postSearch(x);
     return res.json(all);
   } catch (e) {
     return res

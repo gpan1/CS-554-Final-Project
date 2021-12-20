@@ -18,6 +18,7 @@ router.get("/all", async (req, res) => {
 router.post("/add", async (req, res) => {
   try {
     let x = {
+        ...req.body,
       name: xss(req.body.name),
       description: xss(req.body.description)
     };
@@ -100,7 +101,8 @@ router.post("/remove/:id", async (req, res) => {
 router.post("/search", async (req, res) => {
   try {
     let x = (req.body);
-    let all = data.locSearch(x);
+    let all = await data.locSearch(x);
+    // console.log(all);
     return res.json(all);
   } catch (e) {
     return res
