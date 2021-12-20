@@ -11,7 +11,7 @@ function PopularPicks() {
     const fetchData = async () => {
       try {
         let { data } = await axios.get(
-          "http://localhost:4000/locations/popular"
+          "https://ancient-beyond-29069.herokuapp.com/locations/popular"
         );
         let temp = data.splice(0, 3);
         let result = [];

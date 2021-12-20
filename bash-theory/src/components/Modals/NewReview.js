@@ -21,7 +21,7 @@ function ReviewModal(props){
             rating: parseInt(formData.rating)
         };
 
-        await axios.post(`http://localhost:4000/posts/add`, data)
+        await axios.post(`https://ancient-beyond-29069.herokuapp.com/posts/add`, data)
         .then(res => console.log(res))
         .catch(err => console.log(err));
     };

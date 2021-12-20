@@ -22,7 +22,7 @@ function ItemListing(props) {
     setType(params.type);
     const fetchResults = async () => {
       const config = {
-        url: `http://localhost:4000/locations/byTags`,
+        url: `https://ancient-beyond-29069.herokuapp.com/locations/byTags`,
         method: 'post',
         data: {
           type

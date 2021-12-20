@@ -13,7 +13,7 @@ function ItemDetails(){
 
     useEffect(() => {
         async function fetchData(){
-            const { data } = await axios.get(`http://localhost:4000/locations/byId/${params.id}`);
+            const { data } = await axios.get(`https://ancient-beyond-29069.herokuapp.com/locations/byId/${params.id}`);
             setData(data);
         }
 

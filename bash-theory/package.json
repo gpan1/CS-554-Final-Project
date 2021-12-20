@@ -2,6 +2,7 @@
   "name": "bash-theory",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://ancient-beyond-29069.herokuapp.com",
   "dependencies": {
     "@react-google-maps/api": "^2.7.0",
     "@testing-library/jest-dom": "^5.15.0",

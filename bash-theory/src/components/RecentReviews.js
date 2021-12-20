@@ -9,7 +9,7 @@ function RecentReviews() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        let { data } = await axios.get("http://localhost:4000/posts/all");
+        let { data } = await axios.get("https://ancient-beyond-29069.herokuapp.com/posts/all");
         data = data
           .sort((a, b) => a.date - b.date)
           .reverse()

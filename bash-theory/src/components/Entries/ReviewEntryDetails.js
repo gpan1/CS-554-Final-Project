@@ -10,7 +10,7 @@ function ReviewEntryDetails(props){
 
     useEffect(() => {
         async function fetchData(){
-            const {data} = await axios.get(`http://localhost:4000/posts/byId/${props.data}`);
+            const {data} = await axios.get(`https://ancient-beyond-29069.herokuapp.com/posts/byId/${props.data}`);
             setData(data);
         }
 

@@ -17,7 +17,7 @@ function CommentModal(props){
             date: new Date()
         };
 
-        await axios.post(`http://localhost:4000/posts/addComment`, data)
+        await axios.post(`https://ancient-beyond-29069.herokuapp.com/posts/addComment`, data)
         .then(res => console.log(res))
         .catch(err => console.log(err));
     };

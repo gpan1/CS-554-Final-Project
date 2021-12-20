@@ -63,7 +63,7 @@ function Map() {
     // On Load
     let fetchData = async () => {
       try {
-        let { data } = await axios.get("http://localhost:4000/locations/all");
+        let { data } = await axios.get("https://ancient-beyond-29069.herokuapp.com/locations/all");
         let res = data.map((marker) => {
           marker.location = {
             lat: marker.location[1],
