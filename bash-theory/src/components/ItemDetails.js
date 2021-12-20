@@ -37,7 +37,7 @@ function ItemDetails(){
                     </div>
                 </Col>
                 <Col xs={8}>
-                    <ReviewModal/>
+                    <ReviewModal data={data} />
                     <hr/>
                     {(data.posts && data.posts.length > 0) ? data.posts.map((item, i) => <ReviewEntryDetails key={i} data={item} />) : <p className="noComment">No Reviews</p>}
                 </Col>

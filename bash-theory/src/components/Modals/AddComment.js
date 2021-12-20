@@ -9,7 +9,7 @@ function CommentModal(props){
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const onClickHandler = async(e) => {
-        e.preventDefault();
+        //e.preventDefault();
         const data = {
             posterName: formData.posterName,
             content: formData.content,
@@ -24,7 +24,6 @@ function CommentModal(props){
 
     const handleChange = (e) => {
         e.persist();
-        console.log(formData);
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
