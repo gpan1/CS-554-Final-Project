@@ -1,12 +1,12 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Collapse, Row } from "react-bootstrap";
 import Comment from "../Comment";
 import CommentModal from "../Modals/AddComment";
 
 function ReviewEntryDetails(props){
     const [data, setData] = useState({});
-    const [showComments, setShowComments] = useState(true);
+    const [showComments, setShowComments] = useState(false);
 
     useEffect(() => {
         async function fetchData(){
@@ -34,9 +34,11 @@ function ReviewEntryDetails(props){
                     <Row>
                         <CommentModal />
                         <Button variant="comment" onClick={() => setShowComments(!showComments)}>Show Comments</Button>
-                        <div className="comments" hidden={showComments}>
-                            {(data.comments && data.comments.length > 0) ? data.comments.map((item, i) => <Comment data={item} />) : <p className="noComment">No comments.</p>}
-                        </div>
+                        <Collapse in={showComments}>
+                            <div>
+                                {(data.comments && data.comments.length > 0) ? data.comments.map((item, i) => <Comment data={item} />) : <p className="noComment">No comments.</p>}
+                            </div>
+                        </Collapse>
                     </Row>
                 </Col>
             </Row>
