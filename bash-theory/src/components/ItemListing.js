@@ -22,6 +22,7 @@ function ItemListing(props){
                 </Row>
             </div>
         </div>
+        <br/>
         </>
     )
 }
