@@ -6,7 +6,9 @@ function CommentModal(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
+    const onClickHandler = () => {
+        alert("hi");
+    }
     const modal = (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -28,7 +30,7 @@ function CommentModal(){
                     </Form.Group>
                     <br/>
                     <Form.Group className="mb-3">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit" onClick={() => onClickHandler()}>Submit</Button>
                     </Form.Group>
                 </Form>
             </Modal.Body>

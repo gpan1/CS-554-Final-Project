@@ -6,7 +6,15 @@ function ReviewModal(){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-
+    const onClickHandler = () => {
+        // const { data } = await axios.post('http://localhost:4000/posts/addComment', {
+        //     postId: "61bff8a687788d0fce4a8412",
+        //     posterName: "Dimple",
+        //     content: "Something",
+        //     date: new Date(),
+        //   })
+        alert("hi");
+    }
     const modal = (
         <Modal show={show} onHide={handleClose} centered>
             <Modal.Header closeButton>
@@ -43,7 +51,7 @@ function ReviewModal(){
                     </Form.Group>
                     <br/>
                     <Form.Group className="mb-3">
-                        <Button type="submit">Submit</Button>
+                        <Button type="submit" onClick={() => onClickHandler()}>Submit</Button>
                     </Form.Group>
                 </Form>
             </Modal.Body>
