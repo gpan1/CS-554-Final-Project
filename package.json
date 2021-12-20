@@ -10,6 +10,9 @@
     "seed": "node ./tasks/seed.js",
     "heroku-postbuild": "npm run seed && cd bash-theory/ && npm install && npm run build"
   },
+  "engines": {
+    "node": "16.13.1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gpan1/CS-554-Final-Project.git"
