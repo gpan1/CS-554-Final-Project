@@ -9,7 +9,7 @@ async function main() {
   const l1 = await locations.create({
     name: "Muteki Ramen",
     location: [-74.02881, 40.74318],
-    tags: ["Eating Spot"],
+    tags: ["Eatery"],
     description: "Japanese Ramen shop opened in 20xx.",
   });
   console.log(l1);
@@ -45,7 +45,7 @@ async function main() {
     date: new Date(),
     location: [-74.02881, 40.74318],
     locationId: l1._id,
-    tags: ["Eating Spot"],
+    tags: ["Eatery"],
     rating: 4,
   });
   console.log(p2);
@@ -86,7 +86,7 @@ async function main() {
   console.log(c1);
   const s1 = await posts.postSearch({
     term: "Ba",
-    tags: ["Building", "Eating Spot"],
+    tags: ["Building", "Eatery"],
     sort: ["title", 1],
   });
   console.log(s1);
@@ -96,7 +96,7 @@ async function main() {
   console.log(HowePosts);
   const s2 = await locations.locSearch({
     term: "a",
-    tags: ["Building", "Eating Spot"],
+    tags: ["Building", "Eatery"],
     sort: ["avgRating", -1],
   });
   console.log(s2);

@@ -2,7 +2,6 @@ const axios = require("axios");
 const express = require("express");
 const router = express.Router();
 const data = require("../data/locations");
-const xss = require("xss");
 
 router.get("/all", async (req, res) => {
   try {
@@ -17,12 +16,16 @@ router.get("/all", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
+<<<<<<< HEAD
     let x = {
         ...req.body,
       name: xss(req.body.name),
       description: xss(req.body.description)
     };
     let all = await data.create(x);
+=======
+    let all = await data.create(req.body);
+>>>>>>> master
     return res.json(all);
   } catch (e) {
     console.log(e);
@@ -33,10 +36,8 @@ router.post("/add", async (req, res) => {
 });
 
 router.get("/addPost", async (req, res) => {
-  let x = xss(req.body.locationId);
-  let y = xss(req.body.postId);
   try {
-    let all = await data.addPost(x, y);
+    let all = await data.addPost(req.body.locationId, req.body.postId);
     return res.json(all);
   } catch (e) {
     return res
@@ -56,9 +57,17 @@ router.get("/byId/:id", async (req, res) => {
   }
 });
 
-router.get("/byTags", async (req, res) => {
+router.post("/byTags", async (req, res) => {
   try {
+<<<<<<< HEAD
     let all = await data.getLocsByTags(req.body);
+=======
+    let x = req.body.type;
+    let capitalizedTerm = x[0].toUpperCase() + x.slice(1);
+
+    let all = await data.getLocsByTags([capitalizedTerm]);
+    console.log(all);
+>>>>>>> master
     return res.json(all);
   } catch (e) {
     return res

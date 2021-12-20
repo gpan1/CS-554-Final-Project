@@ -43,6 +43,7 @@ function ItemDetails(){
                 </Col>
             </Row>
         </div>
+        <br/>
         </>
     )
 }

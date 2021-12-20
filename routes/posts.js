@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/posts");
-const xss = require("xss");
 
 router.get("/all", async (req, res) => {
   try {

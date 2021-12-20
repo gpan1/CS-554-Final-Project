@@ -8,15 +8,16 @@ import React from "react";
  * @returns 
  */
 function ItemListEntry(props) {
+  
     return (
         <div className="listEntry">
-          <img src={props.imgUrl} alt={`image of ${props.name}`} />
+          <img src={props.post.imgUrl} alt={`${props.post.name}`} />
           <div class="listEntry-title-desc">
-            <h2> {props.name}</h2>
-            <p> {props.description} </p>
+            <h2> {props.post.name}</h2>
+            <p> {props.post.description} </p>
           </div>
           <p class="listEntry-avgRating">
-            {props.avgRating}
+            {props.post.avgRating}
           </p>
         </div>
     )
