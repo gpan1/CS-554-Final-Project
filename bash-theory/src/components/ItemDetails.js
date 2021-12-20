@@ -5,6 +5,7 @@ import noImage from "../noImage.png";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import ReviewEntryDetails from "./Entries/ReviewEntryDetails";
+import ReviewModal from "./Modals/NewReview";
 
 function ItemDetails(){
     const [data, setData] = useState({});
@@ -36,6 +37,8 @@ function ItemDetails(){
                     </div>
                 </Col>
                 <Col xs={8}>
+                    <ReviewModal/>
+                    <hr/>
                     {(data.posts && data.posts.length > 0) ? data.posts.map((item, i) => <ReviewEntryDetails key={i} data={item} />) : <p className="noComment">No Reviews</p>}
                 </Col>
             </Row>

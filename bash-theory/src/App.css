@@ -21,16 +21,16 @@
 }
 
 .btn-modals {
-    background-color: white !important;
+    background-color: #E18888 !important;
     color: black !important;
     border-radius: 0 !important;
-    padding-left: 50px !important;
-    padding-right: 50px !important;
     width: 100%;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
 }
 
 .btn-modals:hover {
-    background-color: rgb(194, 194, 194) !important;
+    background-color: #eb6666 !important;
 }
 
 .container-fluid {
