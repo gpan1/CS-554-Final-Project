@@ -2,11 +2,11 @@ import React from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
+import PopularPicks from "./PopularPicks";
+import RecentReviews from "./RecentReviews";
 import Map from "./Map";
-import noImage from "../noImage.png";
 function Landing() {
   let navigate = useNavigate();
-
   return (
     <>
       <Header />
@@ -14,50 +14,7 @@ function Landing() {
         <Row className="landingRow">
           <Col className="medColumn">
             <h1 className="side">Popular Picks</h1>
-            <div className="box1">
-              <div className="box2">
-                <img
-                  src={noImage}
-                  alt={"Test No AvailableImage"}
-                  className="box2img"
-                ></img>
-              </div>
-              <div className="box3">
-                <p>Patrick Hill. The man, the myth, the legend.</p>
-              </div>
-            </div>
-            <br></br>
-            <div className="box1">
-              <div className="box2">
-                <img
-                  src="https://mutekiramen.com/images/overview-img.jpg"
-                  alt={"Outside of Muteki Ramen"}
-                  className="box2img"
-                ></img>
-              </div>
-              <div className="box3">
-                <p>
-                  Opened in 20XX, Muteki Ramen is a restaurant specializing in
-                  Japanese cuisine.
-                </p>
-              </div>
-            </div>
-            <br></br>
-            <div className="box1">
-              <div className="box2">
-                <img
-                  src={noImage}
-                  alt={"Test No AvailableImage"}
-                  className="box2img"
-                ></img>
-              </div>
-              <div className="box3">
-                <p>
-                  Opened in 20XX, Muteki Ramen is a restaurant specializing in
-                  Japanese cuisine.
-                </p>
-              </div>
-            </div>
+            <PopularPicks />
           </Col>
           <Col xs={5} className="lgColumn">
             <div className="navButtons">
@@ -102,26 +59,7 @@ function Landing() {
           </Col>
           <Col className="medColumn">
             <h1 className="side">Recent Reviews</h1>
-            <div className="box1">
-              <p>Reviewer Name: John Booba</p>
-              <p>Review Item: Adam Szyluk</p>
-              <p>Rating: 0</p>
-              <p>Review: Adam Stinky!</p>
-            </div>
-            <br></br>
-            <div className="box1">
-              <p>Reviewer Name: John Smith</p>
-              <p>Review Item: Adam Szyluk</p>
-              <p>Rating: 0</p>
-              <p>Review: Adam Smelly!</p>
-            </div>
-            <br></br>
-            <div className="box1">
-              <p>Reviewer Name: Adam Szyluk</p>
-              <p>Review Item: Adam Szyluk</p>
-              <p>Rating: 5</p>
-              <p>Review: I love his manly musk</p>
-            </div>
+            <RecentReviews />
           </Col>
         </Row>
       </Container>
