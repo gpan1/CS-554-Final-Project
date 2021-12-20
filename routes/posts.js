@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../data/posts");
+const xss = require("xss");
 
 router.get("/all", async (req, res) => {
   try {
@@ -26,7 +27,7 @@ router.get("/byId/:id", async (req, res) => {
 
 router.get("/popular", async (req, res) => {
   try {
-    let all = await data.getPopularPosts();
+    let all = data.getPopularPosts();
     return res.json(all);
   } catch (e) {
     return res
@@ -37,6 +38,8 @@ router.get("/popular", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
+    xss(req.body);
+    xss(req.body.date);
     const date = req.body.date;
     const parsedDate = new Date(date);
     req.body.date = parsedDate;
@@ -51,6 +54,8 @@ router.post("/add", async (req, res) => {
 
 router.post("/addComment", async (req, res) => {
   try {
+    xss(req.body);
+    xss(req.body.date);
     const date = req.body.date;
     const parsedDate = new Date(date);
     req.body.date = parsedDate;
@@ -75,6 +80,7 @@ router.post("/addComment", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
   try {
+    xss(req.body);
     let all = await data.update(req.params.id, req.body);
     return res.json(all);
   } catch (e) {
@@ -97,7 +103,8 @@ router.post("/remove/:id", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   try {
-    let all = await data.postSearch(req.body);
+    xss(req.body);
+    let all = data.postSearch(req.body);
     return res.json(all);
   } catch (e) {
     return res
