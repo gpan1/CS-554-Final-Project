@@ -17,7 +17,7 @@ function PopularPicks() {
         let result = [];
         for (let i = 0; i < temp.length; i++) {
           let full = await axios.get(
-            `http://localhost:4000/locations/byId/${temp[i]}`
+            `https://ancient-beyond-29069.herokuapp.com/locations/byId/${temp[i]}`
           );
           result.push(full.data);
         }
