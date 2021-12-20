@@ -8,6 +8,13 @@ const {
 } = require("../util");
 const { locations } = require("../config/mongoCollections");
 const { posts } = require("../config/mongoCollections");
+
+const bluebird = require('bluebird')
+const redis = require("redis");
+const client = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
 /**
  * Location schema:
  * coords!: [Number, Number]    \\ (longitude, latitude)
