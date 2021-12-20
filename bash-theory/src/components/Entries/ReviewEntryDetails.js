@@ -32,7 +32,7 @@ function ReviewEntryDetails(props){
                         <p>{data.content}</p>
                     </Row>
                     <Row>
-                        <CommentModal />
+                        <CommentModal data={data} />
                         <Button variant="comment" onClick={() => setShowComments(!showComments)}>Show Comments</Button>
                         <Collapse in={showComments}>
                             <div>
