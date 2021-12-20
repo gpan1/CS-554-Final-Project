@@ -99,6 +99,8 @@
     padding-right: 50px !important;
     width: 100%;
     margin-bottom: 15px !important;
+    font-size: 20px !important;
+    font-weight: 500 !important;
 }
 
 .btn-navigation:hover {
@@ -157,4 +159,86 @@ hr {
     background-color: #C4C4C4;
     padding: 1.2rem;
     margin-top: 2rem;
+    text-align: center;
+}
+
+.btn-header {
+    background-color: transparent !important;
+    text-decoration: none !important;
+    border: none !important;
+    color: #FFFEFE !important;
+}
+
+.btn-header:hover {
+    cursor: pointer;
+}
+
+.reviewRating {
+    background-color: #E18888;
+    text-align: center;
+    padding-top: 1.2rem;
+}
+
+.reviewRating h1 {
+    font-size: 60px;
+}
+
+.reviewHeader {
+    background-color: #777777;
+    color: white;
+    padding: 0.5rem;
+}
+
+.reviewContent {
+    background-color: #D6D6D6;
+    color: black;
+    padding: 0.5rem;
+}
+
+.reviewContent p {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.btn-comment {
+    background-color: #E18888 !important;
+    border-radius: 0 !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+}
+
+.btn-comment:hover{
+    background-color: #eb6666 !important;
+}
+
+button {
+    box-shadow: none !important;
+}
+
+.commentHeader {
+    background-color: #777777;
+    color: white;
+    padding: 0.5rem;
+}
+
+.commentHeader h1 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.commentContent {
+    background-color: #D6D6D6;
+    color: black;
+    padding: 0.5rem;
+}
+
+.commentContent p {
+    font-weight: 600;
+}
+
+.noComment {
+    text-align: center;
+    padding-top: 1rem;
+    text-transform: uppercase;
+    font-size: 30px;
 }
