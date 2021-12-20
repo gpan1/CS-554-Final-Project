@@ -27,8 +27,7 @@
     "express": "^4.17.2",
     "express-server": "^0.7.0",
     "mongodb": "^4.2.2",
-    "redis": "^3.0.2",
-    "xss": "^1.0.10"
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^2.1.1",
