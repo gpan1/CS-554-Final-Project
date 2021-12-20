@@ -1,2 +1,5 @@
 
 web: npm run heroku-build
+web: npm start
+move: cd ./bash-theory
+web: npm start
