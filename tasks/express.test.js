@@ -89,6 +89,7 @@ describe("Location CRUD", () => {
       const response = await request(app)
         .get("/locations/byTags/")
         .send(["Dungeon"]);
+      console.log(response.body);
       expect(response.body[0]._id).toEqual(postId);
     } catch (e) {
       console.log(e);

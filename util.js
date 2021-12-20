@@ -103,7 +103,6 @@ let checkPost = (args) => {
     || !validateStr(args.content)
     || !validateDate(args.date)
     || !validateStr(args.locationId)
-    || !validateCoordinates(args.location)
     || !validateNum(args.rating)
     // optional fields, checking only if passed
     || (args.imgUrl && !validateUrl(args.imgUrl))
