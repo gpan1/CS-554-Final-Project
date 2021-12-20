@@ -33,7 +33,7 @@ function ItemModal(){
                         </Form.FloatingLabel>
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formItemImg">
-                        <Form.FloatingLabel controlId="floatingInput" label="Image URL or Raw Image" classname="mb-3">
+                        <Form.FloatingLabel controlId="floatingInput" label="Image URL" classname="mb-3">
                             <Form.Control type="text" placeholder="Image URL" />
                         </Form.FloatingLabel>
                     </Form.Group>
