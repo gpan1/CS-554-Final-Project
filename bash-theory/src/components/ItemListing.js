@@ -6,6 +6,9 @@ import {useParams} from 'react-router-dom';
 import axios from 'axios';
 import ItemListEntry from './Entries/ItemListEntry';
 
+function capitalize(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function ItemListing(props) {
 
@@ -45,12 +48,12 @@ function ItemListing(props) {
     <>
       <NonLandingHeader />
       <div className="listingDiv">
-        <h1 style={{ marginBottom: "2rem" }}>{type}</h1>
-        {loading && <p>Loading...</p>}
+        <h1 style={{ marginBottom: "2rem" }}>{capitalize(type)}:</h1>
+        {loading && <p className="noComment">Loading...</p>}
         {!loading && <div className="itemList">
           <Row>
             <Col xs={8}>
-              {itemList.map( x => <ItemListEntry post={x}/>)}
+              {(itemList && itemList.length > 0) ? itemList.map( x => <ItemListEntry post={x}/>) : <p className="noComment">No entries.</p>}
             </Col>
             <Col>
               <Map />

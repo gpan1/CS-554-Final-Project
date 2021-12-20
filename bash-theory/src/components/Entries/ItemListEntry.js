@@ -1,4 +1,6 @@
 import React from "react";
+import { Col, Row } from "react-bootstrap";
+import noImage from "../../noImage.png";
 
 /**
  * Meant for any list of items
@@ -10,16 +12,31 @@ import React from "react";
 function ItemListEntry(props) {
   
     return (
+      <>
         <div className="listEntry">
-          <img src={props.post.imgUrl} alt={`${props.post.name}`} />
-          <div class="listEntry-title-desc">
-            <h2> {props.post.name}</h2>
-            <p> {props.post.description} </p>
-          </div>
-          <p class="listEntry-avgRating">
-            {props.post.avgRating}
-          </p>
+          <Row>
+            <Col>
+              <img src={props.post.imgUrl ? props.post.imgUrl : noImage} alt={`${props.post.name}`} />
+            </Col>
+            <Col xs={10}>
+              <Row className="listEntry-title">
+                  <h2>{props.post.name}</h2>
+              </Row>
+              <Row className="listEntry-desc">
+                <Col xs={10}>
+                  {props.post.description}
+                </Col>
+                <Col className="listEntry-avgRating">
+                  <div>
+                  {props.post.avgRating}/5
+                  </div>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </div>
+        <br/>
+      </>
     )
 }
 
