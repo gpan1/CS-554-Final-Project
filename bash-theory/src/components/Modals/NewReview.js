@@ -21,8 +21,6 @@ function ReviewModal(props){
             rating: parseInt(formData.rating)
         };
 
-        console.log(data);
-
         await axios.post(`http://localhost:4000/posts/add`, data)
         .then(res => console.log(res))
         .catch(err => console.log(err));
@@ -30,7 +28,6 @@ function ReviewModal(props){
 
     const handleChange = (e) => {
         e.persist();
-        console.log(formData);
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
