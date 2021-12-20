@@ -35,10 +35,10 @@ function RecentReviews() {
           return (
             <>
               <div className="box1">
-                <p>Reviewer Name: {post.posterName}</p>
-                <p>Review Item: {post.title}</p>
-                <p>Rating: {post.rating}</p>
-                <p>Review: {post.content}</p>
+                <h2 className="side">{post.title}</h2>
+                <h3 style={{fontSize: '20px'}}>By: {post.posterName}</h3>
+                <h3 style={{fontSize: '20px'}}>Rating: {post.rating}/5</h3>
+                <p>{post.content}</p>
               </div>
               <br></br>
             </>

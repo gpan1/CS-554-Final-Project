@@ -13,7 +13,7 @@ function Landing() {
       <Container fluid>
         <Row className="landingRow">
           <Col className="medColumn">
-            <h1 className="side">Popular Picks</h1>
+            <h1 className="side">Popular Picks</h1><hr/>
             <PopularPicks />
           </Col>
           <Col xs={5} className="lgColumn">
@@ -58,7 +58,7 @@ function Landing() {
             <Map />
           </Col>
           <Col className="medColumn">
-            <h1 className="side">Recent Reviews</h1>
+            <h1 className="side">Recent Reviews</h1><hr/>
             <RecentReviews />
           </Col>
         </Row>
