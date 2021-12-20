@@ -17,8 +17,8 @@ router.get("/all", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    xss(req.body);
-    let all = await data.create(req.body);
+    let x = xss(req.body);
+    let all = await data.create(x);
     return res.json(all);
   } catch (e) {
     console.log(e);
@@ -29,10 +29,10 @@ router.post("/add", async (req, res) => {
 });
 
 router.get("/addPost", async (req, res) => {
-  xss(req.body.locationId);
-  xss(req.body.postId);
+  let x = xss(req.body.locationId);
+  let y = xss(req.body.postId);
   try {
-    let all = await data.addPost(req.body.locationId, req.body.postId);
+    let all = await data.addPost(x, y);
     return res.json(all);
   } catch (e) {
     return res
@@ -54,8 +54,8 @@ router.get("/byId/:id", async (req, res) => {
 
 router.get("/byTags", async (req, res) => {
   try {
-    xss(req.body);
-    let all = await data.getLocsByTags(req.body);
+    let x = xss(req.body);
+    let all = await data.getLocsByTags(x);
     return res.json(all);
   } catch (e) {
     return res
@@ -66,8 +66,8 @@ router.get("/byTags", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
   try {
-    xss(req.body);
-    let all = await data.update(req.params.id, req.body);
+    let x = xss(req.body);
+    let all = await data.update(req.params.id, x);
     return res.json(all);
   } catch (e) {
     return res
@@ -89,8 +89,8 @@ router.post("/remove/:id", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   try {
-    xss(req.body);
-    let all = await data.locSearch(req.body);
+    let x = xss(req.body);
+    let all = await data.locSearch(x);
     return res.json(all);
   } catch (e) {
     return res
