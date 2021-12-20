@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 import noImage from "../../noImage.png";
+import { useNavigate } from "react-router-dom";
 
 /**
  * Meant for any list of items
@@ -10,13 +11,15 @@ import noImage from "../../noImage.png";
  * @returns 
  */
 function ItemListEntry(props) {
-  
+    let navigate = useNavigate();
+    console.log(props.post);
     return (
       <>
+      <button onClick={() => navigate(`/item/${props.post._id}`)}>
         <div className="listEntry">
           <Row>
             <Col>
-              <img src={props.post.imgUrl ? props.post.imgUrl : noImage} alt={`${props.post.name}`} />
+              <img src={props.post.imgUrl ? props.post.imgUrl : noImage} alt={`${props.post.id}`} />
             </Col>
             <Col xs={10}>
               <Row className="listEntry-title">
@@ -35,6 +38,7 @@ function ItemListEntry(props) {
             </Col>
           </Row>
         </div>
+        </button>
         <br/>
       </>
     )
