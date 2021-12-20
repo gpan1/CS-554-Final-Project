@@ -70,7 +70,7 @@ const getPostById = async (id) => {
     let postCol = await posts();
     const post = await postCol.findOne({ _id: parsedId });
     if (post === null) throw Error("No post with that id");
-    await client.zincrbyAsync("popular", 1, id);
+    await client.zincrbyAsync("popular_posts", 1, id);
     return idToStr(post);
   } catch (e) {
     console.log(`Get post by id failed: ${e}`);
@@ -83,7 +83,7 @@ const getPostById = async (id) => {
  */
 const getPopularPosts = async () => {
   try {
-    let popularCache = await client.zrangebyscoreAsync("popular", 0, "inf");
+    let popularCache = await client.zrangebyscoreAsync("popular_posts", 0, "inf");
     if (popularCache.length === 0) {
       throw `No posts available.`;
     }
@@ -177,7 +177,7 @@ const create = async (args) => {
   if (!insertedId) throw Error("Failed to create post");
   const res = idToStr(newObj);
   await locations.addPost(res.locationId, res._id);
-  await client.zaddAsync("popular", 1, newObj._id);
+  await client.zaddAsync("popular_posts", 1, newObj._id);
   return res;
 };
 
