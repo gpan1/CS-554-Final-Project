@@ -17,7 +17,7 @@ const { ObjectId } = require("mongodb");
 
 const bluebird = require("bluebird");
 const redis = require("redis");
-const client = redis.createClient();
+const client = redis.createClient({url: "redis://:p22144c42162cd2196ff3e96b3b483b28136b2ccc4e0c3465a98af31c28f79221@ec2-52-202-231-11.compute-1.amazonaws.com:21959"});
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
