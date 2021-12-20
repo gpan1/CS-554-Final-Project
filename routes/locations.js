@@ -52,10 +52,13 @@ router.get("/byId/:id", async (req, res) => {
   }
 });
 
-router.get("/byTags", async (req, res) => {
+router.post("/byTags", async (req, res) => {
   try {
-    let x = xss(req.body);
-    let all = await data.getLocsByTags(x);
+    let x = req.body.type;
+    let capitalizedTerm = x[0].toUpperCase() + x.slice(1);
+
+    let all = await data.getLocsByTags([capitalizedTerm]);
+    console.log(all);
     return res.json(all);
   } catch (e) {
     return res
