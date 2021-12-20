@@ -105,5 +105,4 @@ async function main() {
   console.log("Done seeding database");
   process.exit(0);
 }
-
 main();
