@@ -8,7 +8,7 @@
     "test-seed": "jest tasks/seed.test.js --forceExit",
     "test-express": "jest tasks/express.test.js --forceExit",
     "seed": "node ./tasks/seed.js",
-    "heroku-postbuild": "npm run seed && cd bash-theory/ && npm install && npm build"
+    "heroku-postbuild": "npm run seed && cd bash-theory/ && npm install && npm run build"
   },
   "engines": {
     "node": "16.13.1"
