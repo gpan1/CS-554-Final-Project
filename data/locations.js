@@ -87,7 +87,8 @@ const addPost = async (locationId, postId) => {
 };
 
 const create = async (args) => {
-  if (!args || !validateLocation(args)) throw TypeError("Invalid location");
+  if (!args || !validateLocation(args)) 
+    throw TypeError("Invalid location");
 
   let newObj = {
     name: args.name,
@@ -103,6 +104,7 @@ const create = async (args) => {
   const locCol = await locations();
   const { insertedId } = await locCol.insertOne(newObj);
   if (!insertedId) throw Error("Failed to create location");
+  await client.zaddAsync("popular_locations", 1, newObj._id);
   return idToStr(newObj);
 };
 /**
