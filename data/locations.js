@@ -125,6 +125,22 @@ const getLocById = async (id) => {
   }
 };
 
+const getPopularLocations = async () => {
+  try {
+    let popularCache = 
+      await client.zrangebyscoreAsync("popular_locations", 0, "inf");
+    if (popularCache.length === 0) 
+      throw Error("No locations available");
+    let popularArr = popularCache.reverse();
+    if (popularArr.length > 20) 
+      popularArr = popularArr.slice(0, 20);
+    return popularArr;
+  } catch (e) {
+    console.log(`Get popular locations failed: ${e}`);
+    return {error: e}
+  }
+};
+
 /**
  * Given a list of one or more tags, returns all locations that match the tags
  * Note: this attempts to match ALL given tags; if a post doesn't have ALL
@@ -311,6 +327,7 @@ module.exports = {
   addPost,
   update,
   remove,
+  getPopularLocations,
   // getByCoords,
   getLocById,
   locSearch,
