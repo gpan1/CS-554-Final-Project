@@ -104,7 +104,7 @@ const create = async (args) => {
   const locCol = await locations();
   const { insertedId } = await locCol.insertOne(newObj);
   if (!insertedId) throw Error("Failed to create location");
-  await client.zaddAsync("popular_locations", 1, newObj._id);
+  await client.zaddAsync("popular_locations", 1, insertedId.toString());
   return idToStr(newObj);
 };
 /**
@@ -118,7 +118,7 @@ const getLocById = async (id) => {
     let locCol = await locations();
     const loc = await locCol.findOne({ _id: parsedId });
     if (loc === null) throw Error("No loc with that id");
-    //   await client.zincrbyAsync('popular', 1, id);
+    await client.zincrbyAsync('popular_locations', 1, id);
     return idToStr(loc);
   } catch (e) {
     return { error: e };
