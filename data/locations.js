@@ -8,6 +8,13 @@ const {
 } = require("../util");
 const { locations } = require("../config/mongoCollections");
 const { posts } = require("../config/mongoCollections");
+
+const bluebird = require('bluebird')
+const redis = require("redis");
+const client = redis.createClient();
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
 /**
  * Location schema:
  * coords!: [Number, Number]    \\ (longitude, latitude)
@@ -80,7 +87,8 @@ const addPost = async (locationId, postId) => {
 };
 
 const create = async (args) => {
-  if (!args || !validateLocation(args)) throw TypeError("Invalid location");
+  if (!args || !validateLocation(args)) 
+    throw TypeError("Invalid location");
 
   let newObj = {
     name: args.name,
@@ -96,6 +104,7 @@ const create = async (args) => {
   const locCol = await locations();
   const { insertedId } = await locCol.insertOne(newObj);
   if (!insertedId) throw Error("Failed to create location");
+  await client.zaddAsync("popular_locations", 1, insertedId.toString());
   return idToStr(newObj);
 };
 /**
@@ -109,10 +118,26 @@ const getLocById = async (id) => {
     let locCol = await locations();
     const loc = await locCol.findOne({ _id: parsedId });
     if (loc === null) throw Error("No loc with that id");
-    //   await client.zincrbyAsync('popular', 1, id);
+    await client.zincrbyAsync('popular_locations', 1, id);
     return idToStr(loc);
   } catch (e) {
     return { error: e };
+  }
+};
+
+const getPopularLocations = async () => {
+  try {
+    let popularCache = 
+      await client.zrangebyscoreAsync("popular_locations", 0, "inf");
+    if (popularCache.length === 0) 
+      throw Error("No locations available");
+    let popularArr = popularCache.reverse();
+    if (popularArr.length > 20) 
+      popularArr = popularArr.slice(0, 20);
+    return popularArr;
+  } catch (e) {
+    console.log(`Get popular locations failed: ${e}`);
+    return {error: e}
   }
 };
 
@@ -302,6 +327,7 @@ module.exports = {
   addPost,
   update,
   remove,
+  getPopularLocations,
   // getByCoords,
   getLocById,
   locSearch,

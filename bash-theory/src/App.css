@@ -235,3 +235,10 @@ button {
 .commentContent p {
     font-weight: 600;
 }
+
+.noComment {
+    text-align: center;
+    padding-top: 1rem;
+    text-transform: uppercase;
+    font-size: 30px;
+}

@@ -43,7 +43,6 @@ router.get("/addPost", async (req, res) => {
 
 router.get("/byId/:id", async (req, res) => {
   try {
-    console.log(req.params.id);
     let all = await data.getLocById(req.params.id);
     return res.json(all);
   } catch (e) {
@@ -97,6 +96,19 @@ router.post("/search", async (req, res) => {
     return res
       .status(e instanceof TypeError ? 400 : e instanceof Error ? 404 : 500)
       .json({ error: e });
+  }
+});
+
+router.get('/popular', async (req, res) => {
+  try {
+    let all = await data.getPopularLocations();
+    return res.json(all);
+  } catch (e) {
+    return res
+      .status(e instanceof TypeError ? 400 
+        : e instanceof Error ? 404
+        : 500)
+      .json({error: e});
   }
 });
 

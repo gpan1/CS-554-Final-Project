@@ -85,7 +85,7 @@ function Map() {
   if (loading) {
     return <h2>Loading...</h2>;
   } else if (error) {
-    return <h2>Error: {locData}</h2>;
+    return <h2>Error: 500 Map Unavailable.</h2>;
   } else {
     // This renders the map and the modal.
     // I have decided to make the PoIs from Google non-clickable as it'd potentially interfere with our markers.

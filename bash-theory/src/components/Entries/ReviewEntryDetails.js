@@ -35,7 +35,7 @@ function ReviewEntryDetails(props){
                         <CommentModal />
                         <Button variant="comment" onClick={() => setShowComments(!showComments)}>Show Comments</Button>
                         <div className="comments" hidden={showComments}>
-                            {data.comments ? data.comments.map((item, i) => <Comment data={item} />) : "No Comments"}
+                            {(data.comments && data.comments.length > 0) ? data.comments.map((item, i) => <Comment data={item} />) : <p className="noComment">No comments.</p>}
                         </div>
                     </Row>
                 </Col>
