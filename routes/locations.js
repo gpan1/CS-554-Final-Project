@@ -56,7 +56,9 @@ router.get("/byId/:id", async (req, res) => {
 
 router.post("/byTags", async (req, res) => {
   try {
-    let all = await data.getLocsByTags(req.body);
+    const type = req.body.type;
+    const typeCap = type[0].toUpperCase() + type.slice(1);
+    let all = await data.getLocsByTags([typeCap]);
     return res.json(all);
   } catch (e) {
     return res
