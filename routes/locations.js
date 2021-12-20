@@ -17,7 +17,10 @@ router.get("/all", async (req, res) => {
 
 router.post("/add", async (req, res) => {
   try {
-    let x = xss(req.body);
+    let x = {
+      name: xss(req.body.name),
+      description: xss(req.body.description)
+    };
     let all = await data.create(x);
     return res.json(all);
   } catch (e) {
@@ -54,8 +57,7 @@ router.get("/byId/:id", async (req, res) => {
 
 router.get("/byTags", async (req, res) => {
   try {
-    let x = xss(req.body);
-    let all = await data.getLocsByTags(x);
+    let all = await data.getLocsByTags(req.body);
     return res.json(all);
   } catch (e) {
     return res
@@ -66,7 +68,15 @@ router.get("/byTags", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
   try {
-    let x = xss(req.body);
+    let x = {};
+    if(req.body.name)
+    {
+      x.name = xss(req.body.name);
+    }
+    if(req.body.description)
+    {
+      x.description = xss(req.body.name);
+    }
     let all = await data.update(req.params.id, x);
     return res.json(all);
   } catch (e) {
@@ -89,8 +99,8 @@ router.post("/remove/:id", async (req, res) => {
 
 router.post("/search", async (req, res) => {
   try {
-    let x = xss(req.body);
-    let all = await data.locSearch(x);
+    let x = (req.body);
+    let all = data.locSearch(x);
     return res.json(all);
   } catch (e) {
     return res
