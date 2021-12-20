@@ -12,7 +12,6 @@ import { useNavigate } from "react-router-dom";
  */
 function ItemListEntry(props) {
     let navigate = useNavigate();
-    console.log(props.post);
     return (
       <>
       <button onClick={() => navigate(`/item/${props.post._id}`)}>

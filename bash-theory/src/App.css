@@ -203,14 +203,14 @@ hr {
 }
 
 .btn-comment {
-    background-color: #E18888 !important;
+    background-color: #b49c9c !important;
     border-radius: 0 !important;
     text-transform: uppercase !important;
     font-weight: 700 !important;
 }
 
 .btn-comment:hover{
-    background-color: #eb6666 !important;
+    background-color: #8d7979 !important;
 }
 
 button {

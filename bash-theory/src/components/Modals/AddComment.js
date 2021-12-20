@@ -8,14 +8,14 @@ function CommentModal(props){
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const onClickHandler = async() => {
+    const onClickHandler = async(e) => {
+        e.preventDefault();
         const data = {
             posterName: formData.posterName,
             content: formData.content,
-            id: props.data.locationId
+            postId: props.data._id,
+            date: new Date()
         };
-
-        console.log(data);
 
         await axios.post(`http://localhost:4000/posts/addComment`, data)
         .then(res => console.log(res))
@@ -23,11 +23,13 @@ function CommentModal(props){
     };
 
     const handleChange = (e) => {
+        e.persist();
+        console.log(formData);
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
         });
-    }
+    };
 
     const modal = (
         <Modal show={show} onHide={handleClose} centered>
@@ -37,20 +39,20 @@ function CommentModal(props){
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form>
+                <Form onSubmit={onClickHandler}>
                     <Form.Group className="mb-3" controlId="formPosterName">
                         <Form.FloatingLabel controlId="floatingInput" label="Your Name" classname="mb-3">
-                            <Form.Control type="text" placeholder="Your Name..." onChange={handleChange} />
+                            <Form.Control type="text" placeholder="Your Name..." name="posterName" onChange={handleChange} value={formData.posterName} />
                         </Form.FloatingLabel>
                     </Form.Group>
                     <Form.Group controlId="formPosterDesc">
                         <Form.FloatingLabel controlId="floatingInput" label="Your comment...">
-                            <Form.Control as="textarea" placeholder="Description" style={{ height: '100px' }} onChange={handleChange} />
+                            <Form.Control as="textarea" placeholder="Description" name="content" style={{ height: '100px' }} onChange={handleChange} value={formData.content}/>
                         </Form.FloatingLabel>
                     </Form.Group>
                     <br/>
                     <Form.Group className="mb-3">
-                        <Button type="submit" onClick={() => onClickHandler()}>Submit</Button>
+                        <Button type="submit">Submit</Button>
                     </Form.Group>
                 </Form>
             </Modal.Body>

@@ -60,12 +60,15 @@ router.post("/add", async (req, res) => {
 
 router.post("/addComment", async (req, res) => {
   try {
+    console.log(req.body);
+    console.log("hello");
     let x = 
     {
       posterName: xss(req.body.posterName),
       content: xss(req.body.content),
       postId: xss(req.body.postId)
     }
+    console.log(x);
     let y = (req.body.date);
     const date = y;
     const parsedDate = new Date(date);
